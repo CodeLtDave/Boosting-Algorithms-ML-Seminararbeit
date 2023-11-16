@@ -1,0 +1,83 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| !!! TEMPLATE INSPIRED BY https://github.com/ocjojo/hska-latex-template                  !!! |%%
+%%| !!! HsKa_old.jpg CAN BE FOUND HERE: https://de.wikipedia.org/wiki/Datei:Hska_logo.svg   !!! |%%
+%%| !!! HsKa_new.png WAS CREATED BY USAGE OF IMAGERY FROM: https://www.h-ka.de/intern       !!! |%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| SET DOCUMENT PARAMTER HERE |%%
+\documentclass[11pt]{article}
+
+%%| INCLUDE PACKAGES HERE |%%
+\usepackage[utf8]{inputenc}
+\usepackage[paper=a4paper,left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
+\usepackage[english, ngerman]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[autostyle=true,german=quotes]{csquotes}
+\usepackage[backend=biber, style=ieee]{biblatex}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{microtype}
+
+%%| SET PACKAGE PARAMETERS HERE |%%
+\hypersetup{                                                                        
+    colorlinks,
+    citecolor   = black,
+    filecolor   = black,
+    linkcolor   = black,
+    urlcolor    = black,
+    pdftitle    = {Labor ABCDEFGHIJ},                                               % SET FILE PARAMETERS HERE (SHOWN IN PDF PROPERTIES)
+    pdfsubject  = {Einführung in ABCDEFGHIJ},                                       % ...
+    pdfauthor   = {Max Mustermann},                                                 % ...
+    pdfkeywords = {XY-Labor, Laborbericht ...} ,                                    % ...
+    pdfcreator  = {pdflatex},           
+    pdfproducer = {LaTeX with hyperref}
+}
+\setstretch{1.25}                                                                   % SET GENERAL LINE SPACING HERE
+
+%%| SET OTHER PARAMETERS HERE |%%
+\addbibresource{Document/Bibliography/ref.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| TITLE PAGE |%%
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+        \includegraphics[width=0.55\textwidth]{Images/Template/HsKa_new.png}\\[16ex]
+        \huge{\textbf{-Labor ABCDEFGHIJ-}\\Laborbericht}\\[8ex]
+        \large{\textbf{Laborversuch 1}}\\[1ex]
+        \LARGE{\textbf{Einführung in ABCDEFGHIJ}}\\[14ex]
+        \normalsize{}
+        \begin{tabular}{lll}
+            Student:            & \quad Max Mustermann                                  & 12345 \\[2ex]     % NUMBER IS MAT.NR
+            Universität:        & \quad Hochschule Karlsruhe – Technik und Wirtschaft   &       \\[2ex]
+            Studiengang:        & \quad Elektro- und Informationstechnik                &       \\[2ex]
+            Studienvertiefung:  & \quad Automatisierungstechnik                         &       \\[2ex]
+            Semester:           & \quad Sommersemester 2021                             &       \\[2ex]
+            Dozent:             & \quad Prof. Dr.-Ing. Hans Maier                       &       \\[2ex]
+            Bearbeitet am:      & \quad 16. April 2021                                  &       \\[2ex]
+        \end{tabular}
+    \end{center}
+\end{titlepage}
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| TABLE OF CONTENTS |%%
+\pagenumbering{gobble}    
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| WRITE TEXT HERE |%%
+PLACEHOLDER WITH EXAMPLE FOR IEEE CITATION \cite{einstein}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| BIBLIOGRAPHY |%%                 
+\newpage                                          
+\printbibliography[heading= bibintoc, title={Literaturverzeichnis}]
+\newpage
+\listoffigures
+\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+\newpage
+\listoftables
+\addcontentsline{toc}{section}{Tabellenverzeichnis}
+\end{document}
