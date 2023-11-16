@@ -1,0 +1,9 @@
+
+AdaBoost
+GBT
+Xgboost
+
+Max 35 seiten
+
+Präsentation Leute müssen etwas mitnehmen und verstehen was ist adaBoost und GBTBoost
+
