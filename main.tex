@@ -18,6 +18,7 @@
 \usepackage{hyperref}
 \usepackage{setspace}
 \usepackage{microtype}
+\usepackage{glossaries}
 
 %%| SET PACKAGE PARAMETERS HERE |%%
 \hypersetup{                                                                        
@@ -26,17 +27,18 @@
     filecolor   = black,
     linkcolor   = black,
     urlcolor    = black,
-    pdftitle    = {Labor ABCDEFGHIJ},                                               % SET FILE PARAMETERS HERE (SHOWN IN PDF PROPERTIES)
-    pdfsubject  = {Einführung in ABCDEFGHIJ},                                       % ...
-    pdfauthor   = {Max Mustermann},                                                 % ...
-    pdfkeywords = {XY-Labor, Laborbericht ...} ,                                    % ...
+    pdftitle    = {Machine Learning: Boosting-Algorithmen},                         
+    pdfsubject  = {Seminararbeit},                                                  
+    pdfauthor   = {David Erdös},                                                  
+    pdfkeywords = {Machine Learning, Boosting, AdaBoost, Gradient Boosting} ,     
     pdfcreator  = {pdflatex},           
     pdfproducer = {LaTeX with hyperref}
 }
-\setstretch{1.25}                                                                   % SET GENERAL LINE SPACING HERE
+\setstretch{1.25}                                                                  
 
 %%| SET OTHER PARAMETERS HERE |%%
 \addbibresource{Document/Bibliography/ref.bib}
+\makeglossaries
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%| TITLE PAGE |%%
@@ -45,11 +47,9 @@
     \begin{center}
         \includegraphics[width=0.55\textwidth]{Images/Template/HsKa_new.png}\\[16ex]
         \huge{\textbf{-Machine Learning: Boosting-Algorithmen-}\\Seminararbeit}\\[8ex]
-        % \large{\textbf{Laborversuch 1}}\\[1ex]
-        % \LARGE{\textbf{Einführung in ABCDEFGHIJ}}\\[14ex]
         \normalsize{}
         \begin{tabular}{lll}
-            Student:            & \quad David Erdös                               & 67906 \\[2ex]     % NUMBER IS MAT.NR
+            Student:            & \quad David Erdös                               & 67906 \\[2ex]
             Universität:        & \quad Hochschule Karlsruhe – Technik und Wirtschaft   &       \\[2ex]
             Studiengang:        & \quad Informatik Bachelor             &       \\[2ex]
             Semester:           & \quad Wintersemester 2023                             &       \\[2ex]
@@ -59,14 +59,16 @@
     \end{center}
 \end{titlepage}
 \newpage
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%| TABLE OF CONTENTS |%%
 \pagenumbering{gobble}    
 \tableofcontents
 \newpage
 \pagenumbering{arabic}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%| WRITE TEXT HERE |%%
+%%| MAIN CONTENT |%%
 \include{chapters/chapter1}
 \include{chapters/chapter2}
 \include{chapters/chapter3}
@@ -76,16 +78,28 @@
 \include{chapters/chapter7}
 \include{chapters/chapter8}
 
+%%| GLOSSARY IMPORT |%%
+\input{glossary.tex}
+
+%%| PLACEHOLDER FOR CITATIONS |%%
 PLACEHOLDER WITH EXAMPLE FOR IEEE CITATION \cite{einstein}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| GLOSSARY |%%   
+\newpage    
+\printglossaries{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%| BIBLIOGRAPHY |%%                 
 \newpage                                          
-\printbibliography[heading= bibintoc, title={Literaturverzeichnis}]
+\printbibliography[heading=bibintoc, title={Literaturverzeichnis}]
+
+%%| FIGURES AND TABLES LISTS |%%
 \newpage
 \listoffigures
 \addcontentsline{toc}{section}{Abbildungsverzeichnis}
 \newpage
 \listoftables
 \addcontentsline{toc}{section}{Tabellenverzeichnis}
+
 \end{document}
