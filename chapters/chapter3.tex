@@ -1,12 +1,35 @@
 \section{Boosting}
 
 \subsection{Was ist Boosting?}
-Boosting ist einer der bekanntesten und meistgenutzten Algorithmen im Bereich Machine Learning.\\
-\textbf{Definition}: Der Begriff 'Boosting' bezieht sich auf eine Familie von Algorithmen, die schwache Lerner in starke Lerner umwandeln.\\\\
+Boosting ist einer der bekanntesten und meistgenutzten Algorithmen im Bereich Machine Learning. 
+\textbf{Definition}: `Der Begriff ``Boosting'' bezieht sich auf eine Familie von Algorithmen, die weak learners (schwache Lerner) in strong learners (starke Lerner) umwandeln.'\cite{quickIntroBoostingAlgo}
+\newline
+\newline
 Diese Definition ist leicht an einem Beispiel veranschaulichbar:
+Wie würde man erkennen, ob es jetzt gerade regnet? Folgende Kriterien wären nützlich:
+\begin{itemize}
+    \item Ist der Boden nass?
+    \item Sind Wolken am Himmel zu sehen?
+    \item Gibt es eine hohe Luftfeuchtigkeit?
+    \item Gibt es Personen, die einen Regenschirm an sich tragen?
+    \item Liegt die Außentemperatur über 0 Grad Celsius?
+\end{itemize}
+Diese Regeln können mit hoher Zuverlässigkeit aussagen, ob es gerade regnet oder nicht. Individuell hingegen, ist an einer einzigen Regel nur sehr unzuverlässig die Antwort festzumachen.
+\newline
+\newline
+Beispielsweise ist ein nasser Boden zwar eine Voraussetzung und ein guter erster Filter, allerdings könnte der Boden genauso gut durch einen Rasensprenger nass sein.
+\newline
+Die Temperatur ist hingegen ein relativ schlechtes Indiz für die Frage, ob es gerade regnet. Es unterscheidet aber den Fall Regen und Schnee und ist somit trotzdem essentiell für die Klassifikation.
+\newline
+\newline
+Im Anwendungsfall hat jeder weak learner eine Vorhersage. Da weak learners schon dem Namen entsprechend simpel gehalten sind, ist die Vorhersage meist ein boolscher Wert. Durch, im simpelsten Fall, mehrheitliche Abstimmung der weak learners kann ein strong learner geschaffen werden.\cite*{quickIntroBoostingAlgo} Oder als schlussfolgernde Definition formuliert:
+\begin{mdframed}
+    \textbf{Boosting bezeichnet den Prozess die Vorhersagen mehrerer weak learners zu einem strong learner zu verschmelzen. }
+\end{mdframed}
 
+\subsection{Wie funktioniert Boosting?}
+Die Anschlussfrage die sich stellt ist natürlich, wie funktioniert Boosting im Konkretfall.\cite{SWB-672276232}
 
-\cite{quickIntroBoostingAlgo}
 
 \begin{itemize}
     \item Definition und Grundkonzept von Boosting im Machine Learning
