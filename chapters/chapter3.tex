@@ -1,9 +1,36 @@
 \section{Boosting}
-Aus meiner eigenen Erfahrung weiß ich, dass es selten besonders positive Effekte hat, zusammen mit Kommilitonen eine Klausur zu lösen. Im Regelfall wird es einen Studenten geben, der sich relativ zur Gruppe, am besten auskennt und durch sein überdurchschnittliches Engagement, die Gruppenleistung auf etwa das Niveau bringt, was seiner Eigenleistung entsprochen hätte. 
+Nach meiner eigenen Erfahrung als Student fällt oft auf, dass Gruppenarbeit nicht immer die erwarteten Vorteile bringt. Oft dominiert in Lerngruppen ein einzelner Student, der über fundiertes Wissen verfügt, die Diskussion und die Gruppenleistung spiegelt im Wesentlichen seine individuelle Leistung wider. 
 \newline
-In einem extremeren Fall, bei dem alle Studenten sich wenig Wissen zum Thema angeeignet haben, dass ihre Antworten nur geringfügig besser sind als zufälliges Raten, gibt es die realistische Chance, dass die Gruppenleistung sogar schlechter ausfällt, als hätte man tatsächlich geraten.
+In Fällen, wo alle Mitglieder einer Lerngruppe nur begrenztes Wissen zu einem Thema haben, kann die kollektive Leistung sogar hinter dem zurückbleiben, was man durch zufällige Antworten erwarten würde. Die Vorstellung, dass eine Gruppe von Individuen mit begrenztem Wissen gemeinsam Ergebnisse erzielen kann, die sowohl den Durchschnitt als auch jede individuelle Bestleistung übertreffen, widerspricht oft unserer Intuition. Selbst historische Weisheiten, wie sie in der Bibel gefunden werden, betonen die Risiken einer solchen Zusammenarbeit. Dort heißt es metaphorisch: „Wenn aber ein Blinder den andern führt, so fallen sie beide in die Grube“ (Mt 23,16; Mt 23,24; Lk 6,39; Röm 2,19).
 \newline
 \newline
-Die Vorstellung, dass durch Zusammenarbeit von Personen mit wenig Wissen Ergebnisse erzielt werden, die weit über dem Durchschnittleistung, als auch der individuellen Bestleistung liegen, scheint für Menschen sehr unrealistisch. Sogar die Bibel warnt metaphorisch vor der Zusammenarbeit zweier für eine Aufgabenstellung nicht geeigneter Personen. Es heißt: `Wenn aber ein Blinder den andern führt, so fallen sie beide in die Grube.' (Mt 23,16; Mt 23,24; Lk 6,39; Röm 2,19). Umso mehr überraschender scheint es, dass gerade im Bereich des Machine Learning die Zusammenarbeit schwacher Modelle zu erstaunlich starken Modellen kombiniert werden können.
+Doch im Bereich des maschinellen Lernens offenbart sich ein ganz anderes Szenario. Hier ermöglicht das Boosting-Verfahren, dass die Kombination von schwachen Modellen zu einem leistungsstarken Gesamtsystem führt. Dieser Ansatz, der die aggregierte Intelligenz mehrerer einfacher Modelle nutzt, um komplexe Probleme zu lösen, steht im starken Gegensatz zu den oft enttäuschenden Ergebnissen menschlicher Gruppenarbeit mit begrenztem Wissen \cite[S.~3]{SchapireFreund2012}.
 
-\subsection{Was ist Boosting}
+\subsection{Was ist Boosting am Beispiel Wettererkennung}
+\begin{mdframed}
+    \textbf{Boosting (ursprünglich Hypothesis Boosting)} bezeichnet eine beliebige Ensemble-Methode, bei der sich mehrere schwache Lerner zu einem starken Lerner kombinieren lassen \textcite[S.~191]{Geron2018}.
+\end{mdframed}
+
+Die genannte Definition des Boosting lässt sich gut anhand des Beispiels der Wettererkennung veranschaulichen. Betrachten wir folgende einfache Regeln (Schwache Lerner) zur Beurteilung, ob es regnet:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|}
+    \hline
+    \textbf{Schwache Lerner}      & \textbf{Grenzwert}   \\ \hline
+    Nasser Boden               & Ja                  \\ \hline
+    Wolken am Himmel           & Ja                  \\ \hline
+    Hohe Luftfeuchtigkeit      & $>$ 80\%             \\ \hline
+    Personen mit Regenschirm   & Ja                  \\ \hline
+    Außentemperatur            & $>$ 0°C             \\ \hline
+    \end{tabular}
+    \caption{Individuelle Vorhersagen der Schwache Lerner}
+    \label{tab:weak_learners}
+\end{table}
+
+Beispielsweise ist ein nasser Boden zwar eine Voraussetzung und ein guter erster Filter, allerdings könnte der Boden genauso gut durch einen Rasensprenger nass sein.
+\newline
+Die Temperatur ist hingegen ein relativ schlechtes Indiz für die Frage, ob es gerade regnet. Es unterscheidet aber den Fall Regen und Schnee und ist somit trotzdem essentiell für die Klassifikation.
+
+\subsubsection{Erzeugung eines starken Lerners}
+In der Praxis fasst der Boosting-Algorithmus die Vorhersagen der Schwache Lerner zusammen. Im einfachsten Fall geschieht dies durch Mehrheitsentscheidung, was zur Erstellung eines starken Lerners führt, der auf der kollektiven Intelligenz basiert \cite[S.~4]{SchapireFreund2012}.
