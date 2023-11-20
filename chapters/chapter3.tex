@@ -81,7 +81,7 @@ Ein zuverlässiger Lerner \( t \) hat eine höhere Gewichtung \( \alpha_t \) je 
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}
+    \begin{tikzpicture}[scale=0.75]
     \begin{axis}[
         title={Plot der Funktion \( \alpha(\varepsilon) = \ln\left(\frac{1 - \varepsilon}{\varepsilon}\right) \)},
         xlabel={Fehler \( \varepsilon \)},
@@ -113,7 +113,36 @@ Die Gesamtvorhersage \( H \) des Boosting-Modells ergibt sich aus der gewichtete
 \end{equation}
     
 In anderen Worten wird die Vorhersage eines Lerners auf den Daten \( h_t(x) \) mit seiner Gewichtung \( \alpha \) multipliziert. Die Summe dieses Produkts für alle Lerner \( T \) ergibt die Gesamtvorhersage \( H \). Hier wird lediglich noch die Signum-Funktion angewendet, um den Wert zwischen 0 und 1 zu glätten.
+
+% Plot der Signum-Funktion
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=0.75]
+    \begin{axis}[
+        title={Plot der Signum-Funktion},
+        xlabel={x},
+        ylabel={sign(x)},
+        xmin=-2, xmax=2,
+        ymin=-2, ymax=2,
+        grid=both,
+        axis lines=middle,
+        ytick={-1,0,1},
+        xtick={-2,-1,0,1,2}
+    ]
     
+    \addplot[
+        domain=-2:2, 
+        samples=50, 
+        color=blue,
+        jump mark left,
+    ]
+    {sign(x)};
+    
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Visualisierung der Signum-Funktion}
+    \label{fig:signum_function}
+\end{figure}
 
 \subsection{Annahme des schwache Lernens}
 Die Voraussetzung jedes Boosting-Algorithmus ist ein bereits vorhandener schwacher Lernalgorithmus. Das Ziel ist es dann, durch mehrfache Ausführung des Boosting-Algorithmus' die Leistung des Lernalgorithmus zu verbessern, bzw. zu `boosten'. Laut \textcite[S. S.~4]{SchapireFreund2012} reicht es aus geringe Ansprüche an die Leistung der schwachen Lerner zu stellen. Es ist völlig hinreichend, wenn der Lernalgorithmus Hypothesen liefert mit etwas besseren Ergebnissen als 50\% Fehlerquote, was dem uninformierten Raten gleich käme.
