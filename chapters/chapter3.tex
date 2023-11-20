@@ -60,7 +60,7 @@ Aus der Mehrheitsentscheidung, bei der alle schwachen Lerner die gleiche Stimmkr
 \begin{mdframed}
     \textbf{Gegeben:} \\
     - Ein Datensatz \( X = \{(x_1, y_1), (x_2, y_2), \dots, (x_n, y_n)\} \). \\
-    - Schwache Lerner \( t \) mit Vorhersagefunktionen \( h_t \).
+    - Schwache Lerner \( t \) mit Vorhersagefunktion/Hypthese \( h_t \).
 \end{mdframed}
 
 Jeder schwache Lerner trifft Vorhersagen basierend auf dem Datensatz \( X \). Der Erfolg dieser Vorhersagen wird durch den Fehler \( \varepsilon_t \) gemessen.
@@ -115,5 +115,7 @@ Die Gesamtvorhersage \( H \) des Boosting-Modells ergibt sich aus der gewichtete
 In anderen Worten wird die Vorhersage eines Lerners auf den Daten \( h_t(x) \) mit seiner Gewichtung \( \alpha \) multipliziert. Die Summe dieses Produkts für alle Lerner \( T \) ergibt die Gesamtvorhersage \( H \). Hier wird lediglich noch die Signum-Funktion angewendet, um den Wert zwischen 0 und 1 zu glätten.
     
 
-\subsection{Annahme des Schwache Lernens}
-Voraussetzung hierfür ist, dass SEite 4 
+\subsection{Annahme des schwache Lernens}
+Die Voraussetzung jedes Boosting-Algorithmus ist ein bereits vorhandener schwacher Lernalgorithmus. Das Ziel ist es dann, durch mehrfache Ausführung des Boosting-Algorithmus' die Leistung des Lernalgorithmus zu verbessern, bzw. zu `boosten'. Laut \textcite[S. S.~4]{SchapireFreund2012} reicht es aus geringe Ansprüche an die Leistung der schwachen Lerner zu stellen. Es ist völlig hinreichend, wenn der Lernalgorithmus Hypothesen liefert mit etwas besseren Ergebnissen als 50\% Fehlerquote, was dem uninformierten Raten gleich käme.
+\newline
+Diese Annahme, dass der Lerner schwache Hypothesen hervorbringt, die mindestens etwas besser sind als zufälliges Raten, wird die \textit{Annahme des schwachen Lernens genannt}.
