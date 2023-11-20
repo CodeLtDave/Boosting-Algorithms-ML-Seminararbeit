@@ -49,12 +49,71 @@ Der nächste Schritt ist es, die Aussagen der schwachen Lerner in ein nützliche
     Nein & Ja & Nein & Ja & Ja & 80\% \\ \hline
     ... & ... & ... & ... & ... & ... \\ \hline
     \end{tabular}
-    \caption{Wahrheitstabelle zur Vorhersage von Regen basierend auf schwachen Lernern. Die Werte sind frei gewählt und haben nicht notwendigerweise einen echten Bezug zur Realität, sondern dienen der Veranschaulichung.}
+    \caption{Wahrheitstabelle zur Vorhersage von Regen basierend auf schwachen Lernern. Die Werte dienen in erster Linie der Veranschaulichung.}
     \label{tab:rain_prediction}
 \end{table}
 
-\subsubsection{Gewichtete Abstimmung}
-Im Anwendungsfall würde man sich nicht mit einer ungewichteten Abstimmung zufrieden geben. 
+\subsection{Gewichtete Abstimmung}
+Aus der Mehrheitsentscheidung, bei der alle schwachen Lerner die gleiche Stimmkraft haben, eine Vorhersage zu treffen, liefert nur selten die besten Ergebnisse. Eine bessere Vorgehensweise, die auch von vielen Boosting-Algorithmen benutzt wird, ist die gewichtete Abstimmung. Diese Methode berechnet die Stimmkraft oder Gewichtung des Lerners \( \alpha \) individuell, wie im Algorithmus 1.1 von Schapire und Freund beschrieben \parencite[S.~5]{SchapireFreund2012}.
 
-\subsection{Schwaches Lernen Annahme}
+\subsubsection{Grundlegende Annahmen}
+\begin{mdframed}
+    \textbf{Gegeben:} \\
+    - Ein Datensatz \( X = \{(x_1, y_1), (x_2, y_2), \dots, (x_n, y_n)\} \). \\
+    - Schwache Lerner \( t \) mit Vorhersagefunktionen \( h_t \).
+\end{mdframed}
+
+Jeder schwache Lerner trifft Vorhersagen basierend auf dem Datensatz \( X \). Der Erfolg dieser Vorhersagen wird durch den Fehler \( \varepsilon_t \) gemessen.
+
+\subsubsection{Fehlerberechnung}
+Der Fehler \( \varepsilon_t \) eines schwachen Lerners ist der Anteil der falschen Vorhersagen:
+\begin{gather}
+    \varepsilon_t = \frac{1}{n} \sum_{i=1}^{n} \mathbb{I}(h_t(x_i) \neq y_i),
+\end{gather}
+wobei \( \mathbb{I} \) die Indikatorfunktion ist, die 1 ist, wenn \( h_t(x_i) \neq y_i \) (d.h., die Vorhersage ist falsch), und 0 sonst.
+
+\subsubsection{Gewichtung der schwachen Lerner}
+Die Gewichtung \( \alpha_t \) jedes schwachen Lerners basiert auf seinem Fehler \( \varepsilon_t \):
+\begin{gather}
+    \alpha_t = \ln\left(\frac{1 - \varepsilon_t}{\varepsilon_t}\right).
+\end{gather}
+Ein zuverlässiger Lerner \( t \) hat eine höhere Gewichtung \( \alpha_t \) je nach dem wie groß sein Fehler \( \varepsilon_t \) ist.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={Plot der Funktion \( \alpha(\varepsilon) = \ln\left(\frac{1 - \varepsilon}{\varepsilon}\right) \)},
+        xlabel={Fehler \( \varepsilon \)},
+        ylabel={Gewicht \( \alpha \)},
+        xmin=0, xmax=1,
+        ymin=-5, ymax=5,
+        grid=both,
+        axis lines=middle
+    ]
+    
+    \addplot[
+        domain=0.01:0.99, 
+        samples=100, 
+        color=blue,
+    ]
+    {ln((1-x)/x)};
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Visualisierung der Gewichtsfunktion \( \alpha \) in Abhängigkeit vom Fehler \( \varepsilon \)}
+    \label{fig:alpha_plot}
+\end{figure}
+    
+
+\subsubsection{Endgültige Vorhersage des starken Lerners}
+Die Gesamtvorhersage \( H \) des Boosting-Modells ergibt sich aus der gewichteten Abstimmung aller schwachen Lerner.
+
+\begin{equation}
+    H(x) = \text{sign}\left(\sum_{t=1}^{T} \alpha_t h_t(x)\right).
+\end{equation}
+    
+In anderen Worten wird die Vorhersage eines Lerners auf den Daten \( h_t(x) \) mit seiner Gewichtung \( \alpha \) multipliziert. Die Summe dieses Produkts für alle Lerner \( T \) ergibt die Gesamtvorhersage \( H \). Hier wird lediglich noch die Signum-Funktion angewendet, um den Wert zwischen 0 und 1 zu glätten.
+    
+
+\subsection{Annahme des Schwache Lernens}
 Voraussetzung hierfür ist, dass SEite 4 
