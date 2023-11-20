@@ -21,6 +21,9 @@
 \usepackage{glossaries}
 \usepackage{mdframed}
 \usepackage{pgfplots}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
 
 
 %%| SET PACKAGE PARAMETERS HERE |%%
@@ -43,6 +46,7 @@
 \addbibresource{Document/Bibliography/ref.bib}
 \makeglossaries
 \pgfplotsset{compat=1.17}
+\renewcommand{\listalgorithmname}{Algorithmenverzeichnis}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%| TITLE PAGE |%%
@@ -102,5 +106,8 @@
 \newpage
 \listoftables
 \addcontentsline{toc}{section}{Tabellenverzeichnis}
+\newpage
+\listofalgorithms
+\addcontentsline{toc}{section}{Algorithmenverzeichnis}
 
 \end{document}

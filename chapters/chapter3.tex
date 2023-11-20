@@ -65,14 +65,14 @@ Aus der Mehrheitsentscheidung, bei der alle schwachen Lerner die gleiche Stimmkr
 
 Jeder schwache Lerner trifft Vorhersagen basierend auf dem Datensatz \( X \). Der Erfolg dieser Vorhersagen wird durch den Fehler \( \varepsilon_t \) gemessen.
 
-\subsubsection{Fehlerberechnung}
+\subsubsection{Fehlerberechnung}\label{sec:errorComputation}
 Der Fehler \( \varepsilon_t \) eines schwachen Lerners ist der Anteil der falschen Vorhersagen:
 \begin{gather}
     \varepsilon_t = \frac{1}{n} \sum_{i=1}^{n} \mathbb{I}(h_t(x_i) \neq y_i),
 \end{gather}
 wobei \( \mathbb{I} \) die Indikatorfunktion ist, die 1 ist, wenn \( h_t(x_i) \neq y_i \) (d.h., die Vorhersage ist falsch), und 0 sonst.
 
-\subsubsection{Gewichtung der schwachen Lerner}
+\subsubsection{Gewichtung der schwachen Lerner}\label{sec:weightedLearners}
 Die Gewichtung \( \alpha_t \) jedes schwachen Lerners basiert auf seinem Fehler \( \varepsilon_t \):
 \begin{gather}
     \alpha_t = \ln\left(\frac{1 - \varepsilon_t}{\varepsilon_t}\right).
