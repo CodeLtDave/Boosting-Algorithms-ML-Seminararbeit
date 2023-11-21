@@ -9,20 +9,30 @@ Obwohl GBT sowohl für Klassifikations- als auch für Regressionsprobleme einset
 Der Grund dafür ist, dass GBT deutlich einfach verständlich ist in der Art und Weise, wie er kontinuierliche Werte vorhersagt.
 \newline
 
-\subsection{Die Loss-Funktion im Gradient Boosting Trees}
-Bevor wir uns in die Einzelheiten des Gradient Boosting Trees Algorithmus vertiefen, sollten wir einen Blick auf die Loss-Funktion werfen, die eine zentrale Rolle in diesem Prozess spielt. 
-
-In der Welt des maschinellen Lernens ist die Loss-Funktion das Maß für den Fehler zwischen den vorhergesagten und den tatsächlichen Werten. Sie ist entscheidend für das Trainieren und die Verbesserung unserer Modelle. Beim Gradient Boosting Trees wird oft die Mean Squared Error (MSE) Loss-Funktion verwendet, welche die quadratische Differenz zwischen den vorhergesagten Werten und den tatsächlichen Werten berechnet. 
-
-Formal ausgedrückt wird die MSE Loss-Funktion wie folgt definiert:
+\subsection{Die Loss-Funktion \( L \)}
+Ein wesentlicher Bestandteil des Gradient Boosting Trees (GBT) Algorithmus ist die Loss-Funktion, die zur Bewertung der Modellgenauigkeit eingesetzt wird. In GBT wird häufig die Mean Squared Error (MSE) Loss-Funktion verwendet. Diese berechnet die quadratische Differenz zwischen den tatsächlichen Werten \( y \) und den vom Modell vorhergesagten Werten \( F(x) \):
 
 \begin{equation}
     L(y, F(x)) = \frac{1}{2}(y - F(x))^2
 \end{equation}
 
-Hierbei ist \( y \) der tatsächliche Wert und \( F(x) \) der vom Modell vorhergesagte Wert. Diese Funktion wird so gestaltet, dass sie immer positiv ist und größer wird, je größer der Unterschied zwischen der Vorhersage und dem tatsächlichen Wert ist. Die Division durch 2 ist eine mathematische Bequemlichkeit, die das Berechnen der Gradienten in späteren Schritten vereinfacht.
+Die Division durch 2 dient der Vereinfachung der Berechnung des Gradienten, welcher für die Anpassung des Modells benötigt wird.
 
-In jedem Schritt des Algorithmus wird diese Loss-Funktion genutzt, um das sogenannte Pseudo-Residuum zu berechnen. Dies ist ein wichtiger Bestandteil des Algorithmus, da das Residuum angibt, wie weit unsere aktuellen Vorhersagen vom Zielwert abweichen. Diese Residuen werden dann verwendet, um den nächsten Entscheidungsbaum im Algorithmus zu trainieren, mit dem Ziel, die Gesamtvorhersage des Modells zu verbessern.
+Ein zentrales Konzept im GBT ist das der Residuen. Residuen bezeichnen die Differenz zwischen den tatsächlichen Datenpunkten \( y_i \) und den durch das Modell vorhergesagten Werten \( F(x_i) \). Sie geben Aufschluss darüber, wie weit das aktuelle Modell von den realen Daten abweicht.
+
+Im Kontext des GBT spricht man oft von Pseudo-Residuen. Diese werden für jede Iteration \( m \) des Algorithmus berechnet und sind definiert als die negative Ableitung der Loss-Funktion bezüglich der Modellvorhersagen:
+
+\begin{equation}
+    r_{i,m} = -\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\bigg|_{F(x)=F_{m-1}(x)}
+\end{equation}
+
+Für die MSE Loss-Funktion vereinfacht sich dies zu:
+
+\begin{equation}
+    r_{i,m} = y_i - F_{m-1}(x_i)
+\end{equation}
+
+Das Pseudo-Residuum repräsentiert somit den Fehler des aktuellen Modells \( F_{m-1}(x) \) bei der Vorhersage des tatsächlichen Wertes \( y_i \). Im Gegensatz zum einfachen Residuum, welches nur den Fehler angibt, reflektiert das Pseudo-Residuum die Richtung und das Ausmaß der erforderlichen Anpassung des Modells. Dies ist entscheidend für den GBT-Algorithmus, da in jedem Schritt ein neuer Entscheidungsbaum trainiert wird, um genau diese Pseudo-Residuen zu minimieren.
 
 
 
