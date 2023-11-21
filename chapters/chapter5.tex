@@ -1,4 +1,112 @@
 \section{Gradient Boosting (5-6 Seiten)}
-\subsection{Theoretische Grundlagen}
+Der Gradient Boosting Trees (GBT) Algorithmus hat sich in den letzten Jahren als einer der führenden Boosting-Algorithmen etabliert. Charakteristisch für GBT ist die Verwendung von Entscheidungsbäumen als Basis-Lernalgorithmus. Ähnlich wie AdaBoost verfolgt GBT das Prinzip des adaptiven Lernens (\autoref{sec:adaptive_learning}), bei dem jeder nachfolgende Entscheidungsbaum darauf abzielt, die Fehler seines Vorgängers zu korrigieren.
+
+\subsection{Unterschied zu AdaBoost}
+Der entscheidende Unterschied zu AdaBoost \ref{sec:adaptive_learning} liegt jedoch in der Art und Weise, wie GBT die Trainingsdaten behandelt. Während AdaBoost die Gewichtung aller Trainingsdaten anpasst, um die Fehler des vorherigen Lerners hervorzuheben, beschränkt sich GBT auf die Redzierung des Restfehlers.
+Genauer gesagt bedeutet dies, dass jeder neue Baum auf den Residuen (Unterschiede zwischen den tatsächlichen und den vorhergesagten Werten) des vorherigen trainiert wird.
+\newline
+Obwohl GBT sowohl für Klassifikations- als auch für Regressionsprobleme einsetzbar ist, konzentriert sich diese Arbeit hauptsächlich auf die Anwendung von GBT im Kontext der Regression. 
+Der Grund dafür ist, dass GBT deutlich einfach verständlich ist in der Art und Weise, wie er kontinuierliche Werte vorhersagt.
+\newline
+
+\subsection{Die Loss-Funktion im Gradient Boosting Trees}
+Bevor wir uns in die Einzelheiten des Gradient Boosting Trees Algorithmus vertiefen, sollten wir einen Blick auf die Loss-Funktion werfen, die eine zentrale Rolle in diesem Prozess spielt. 
+
+In der Welt des maschinellen Lernens ist die Loss-Funktion das Maß für den Fehler zwischen den vorhergesagten und den tatsächlichen Werten. Sie ist entscheidend für das Trainieren und die Verbesserung unserer Modelle. Beim Gradient Boosting Trees wird oft die Mean Squared Error (MSE) Loss-Funktion verwendet, welche die quadratische Differenz zwischen den vorhergesagten Werten und den tatsächlichen Werten berechnet. 
+
+Formal ausgedrückt wird die MSE Loss-Funktion wie folgt definiert:
+
+\begin{equation}
+    L(y, F(x)) = \frac{1}{2}(y - F(x))^2
+\end{equation}
+
+Hierbei ist \( y \) der tatsächliche Wert und \( F(x) \) der vom Modell vorhergesagte Wert. Diese Funktion wird so gestaltet, dass sie immer positiv ist und größer wird, je größer der Unterschied zwischen der Vorhersage und dem tatsächlichen Wert ist. Die Division durch 2 ist eine mathematische Bequemlichkeit, die das Berechnen der Gradienten in späteren Schritten vereinfacht.
+
+In jedem Schritt des Algorithmus wird diese Loss-Funktion genutzt, um das sogenannte Pseudo-Residuum zu berechnen. Dies ist ein wichtiger Bestandteil des Algorithmus, da das Residuum angibt, wie weit unsere aktuellen Vorhersagen vom Zielwert abweichen. Diese Residuen werden dann verwendet, um den nächsten Entscheidungsbaum im Algorithmus zu trainieren, mit dem Ziel, die Gesamtvorhersage des Modells zu verbessern.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \subsection{Algorithmus-Struktur und Funktionsweise}
+Der GBT-Algorithmus (siehe \autoref{algo:gbt} ist in mehrere Schritte unterteilt, welche im folgenden genau erklärt werden:
+
+
+\subsection{Algorithmus-Struktur und Funktionsweise}
+Der Gradient Boosting Trees Algorithmus, im Folgenden GBT genannt, ist ein komplexer, aber hochgradig effektiver Boosting-Algorithmus. Der folgende Abschnitt erklärt die einzelnen Schritte des GBT-Algorithmus (siehe Algorithmus~\ref{algo:gbt}):
+
+\paragraph{Schritt 1: Initialisierung (Zeile 2)}\label{para:GBT_Initialisierung}
+\label{para:gbt_algo_s1}
+Zu Beginn wird ein Basismodell \( F_0(x) \) erstellt, welches oft der Durchschnitt oder Median der Zielwerte \( y \) ist. Dieses Modell bildet den Ausgangspunkt für die iterativen Verbesserungen.
+
+\paragraph{Schritt 2: Iterationen (Zeile 3 bis 7)}
+\label{para:gbt_algo_s2}
+Im Kern des GBT-Algorithmus stehen iterative Schritte, die darauf abzielen, das aktuelle Modell schrittweise zu verbessern. Diese Iterationen laufen über einen vordefinierten Zeitraum \( T \).
+
+\paragraph{Schritt 2.1: Berechnung der Residuen (Zeile 4)}
+\label{para:gbt_algo_s2.1}
+In jeder Iteration \( t \) werden die Residuen \( r_{t,i} \) für jeden Datenpunkt \( i \) berechnet. Diese Residuen repräsentieren die Differenz zwischen den tatsächlichen Werten \( y_i \) und den Vorhersagen des aktuellen Modells \( F_{t-1}(x_i) \).
+
+\paragraph{Schritt 2.2: Training der Entscheidungsbäume (Zeile 5)}
+\label{para:gbt_algo_s2.2}
+Ein neuer Entscheidungsbaum \( h_t \) wird auf den Residuen trainiert. Jeder Baum fokussiert sich darauf, die Fehler des vorherigen Modells zu minimieren.
+
+\paragraph{Schritt 2.3: Optimierung des Multiplikators (Zeile 6)}
+\label{para:gbt_algo_s2.3}
+Für jeden Baum wird ein Multiplikator \( \gamma_t \) gefunden, der den Einfluss des Baumes auf das Gesamtmodell optimal anpasst. Dies kann beispielsweise durch eine Linearsuche erfolgen.
+
+\paragraph{Schritt 2.4: Aktualisierung des Modells (Zeile 7)}
+\label{para:gbt_algo_s2.4}
+Das Modell wird durch Hinzufügen des neuen, gewichteten Entscheidungsbaumes \( \gamma_t h_t(x) \) zum aktuellen Modell \( F_{t-1}(x) \) aktualisiert. Dadurch wird das Modell iterativ verbessert.
+
+\paragraph{Schritt 3: Ausgabe des finalen Modells (Zeile 8)}
+\label{para:gbt_algo_s3}
+Nach Abschluss aller Iterationen wird das finale Modell \( F_T(x) \) als das Ergebnis des GBT-Algorithmus ausgegeben. Dieses Modell ist die Summe aller gewichteten Entscheidungsbäume und repräsentiert die kumulativen Verbesserungen über alle Iterationen.
+
+\begin{algorithm}[H]
+    \caption[Gradient Boosting Trees Algorithmus]{Gradient Boosting Trees Algorithmus (nach \textcite[S.~346]{Frochte2020})}\label{algo:gbt}
+    \begin{algorithmic}[1]
+    \State \textbf{Gegeben:} Trainingsdatensatz \( (x_1,y_1), \dots, (x_m,y_m) \)
+    \State \textbf{Initialisierung:} Initialisiere das Modell mit einem konstanten Wert \( F_0(x) = \frac{1}{n} \sum_{i=1}^{n} y_i \)
+    \For{\( t = 1, \dots, T \)}
+        \State Berechne Residuen \( r_{t,i} = y_i - F_{t-1}(x_i) \) für alle \( i \)
+        \State Trainiere einen Entscheidungsbaum \( h_t \) auf \( (x_i, r_{t,i}) \)
+        \State Finde den besten Multiplikator \( \alpha_t \) für \( h_t(x) \), z.B. durch Linearsuche
+        \State Aktualisiere das Modell: \( F_t(x) = F_{t-1}(x) + \alpha_t \cdot h_t(x) \)
+    \EndFor
+    \State \textbf{Ausgabe:} Das endgültige Modell \( F_T(x) \)
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+    \caption[MSE Gradient Tree Boosting]{MSE Gradient Tree Boosting (nach \textcite[S.~346]{Frochte2020})}\label{algo:gbt}
+    \begin{algorithmic}[1]
+    \State \textbf{Gegeben:} Trainingsdatensatz \( (x_1,y_1), \dots, (x_n,y_n) \)
+    \State \textbf{Initialisierung:} Starte mit einem Basismodell \( F_0(x) \), z.B. dem Mittelwert der Labels \( y \)
+    \For{\( m = 1, \dots, M \)}
+        \State Berechne das Pseudo-Residuum \( r_{i,m} = y_i - F_{m-1}(x_i) \) für alle \( i \)
+        \State Trainiere einen Entscheidungsbaum \( h_m \) auf \( (x_i, r_{i,m}) \)
+        \State Führe das Update durch: \( F_m(x) = F_{m-1}(x) + \alpha \cdot h_m(x) \)
+    \EndFor
+    \State \textbf{Ausgabe:} Das endgültige Modell \( F_M(x) \)
+    \end{algorithmic}
+\end{algorithm}
+
+
+
+
+
 \subsection{Beispielanwendung mit Erläuterung}

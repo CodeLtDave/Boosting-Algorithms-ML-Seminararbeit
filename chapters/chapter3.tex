@@ -59,20 +59,20 @@ Aus der Mehrheitsentscheidung, bei der alle schwachen Lerner die gleiche Stimmkr
 \subsubsection{Grundlegende Annahmen}
 \begin{mdframed}
     \textbf{Gegeben:} \\
-    - Ein Datensatz \( X = \{(x_1, y_1), (x_2, y_2), \dots, (x_n, y_n)\} \). \\
+    - Ein Datensatz \( X \), bestehend aus \( n \) Beispielpaaren, wobei jedes Paar aus einem Eingabedatum \( x_i \) und dem entsprechenden Zielwert \( y_i \) besteht: \( X = \{(x_1, y_1), (x_2, y_2), \dots, (x_n, y_n)\} \). \\
     - Schwache Lerner \( t \) mit Vorhersagefunktion/Hypthese \( h_t \).
 \end{mdframed}
 
 Jeder schwache Lerner trifft Vorhersagen basierend auf dem Datensatz \( X \). Der Erfolg dieser Vorhersagen wird durch den Fehler \( \varepsilon_t \) gemessen.
 
-\subsubsection{Fehlerberechnung}
+\subsubsection{Fehlerberechnung}\label{sec:errorComputation}
 Der Fehler \( \varepsilon_t \) eines schwachen Lerners ist der Anteil der falschen Vorhersagen:
 \begin{gather}
     \varepsilon_t = \frac{1}{n} \sum_{i=1}^{n} \mathbb{I}(h_t(x_i) \neq y_i),
 \end{gather}
 wobei \( \mathbb{I} \) die Indikatorfunktion ist, die 1 ist, wenn \( h_t(x_i) \neq y_i \) (d.h., die Vorhersage ist falsch), und 0 sonst.
 
-\subsubsection{Gewichtung der schwachen Lerner}
+\subsubsection{Gewichtung der schwachen Lerner}\label{sec:weightedLearners}
 Die Gewichtung \( \alpha_t \) jedes schwachen Lerners basiert auf seinem Fehler \( \varepsilon_t \):
 \begin{gather}
     \alpha_t = \ln\left(\frac{1 - \varepsilon_t}{\varepsilon_t}\right).
@@ -81,7 +81,7 @@ Ein zuverlässiger Lerner \( t \) hat eine höhere Gewichtung \( \alpha_t \) je 
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}
+    \begin{tikzpicture}[scale=0.75]
     \begin{axis}[
         title={Plot der Funktion \( \alpha(\varepsilon) = \ln\left(\frac{1 - \varepsilon}{\varepsilon}\right) \)},
         xlabel={Fehler \( \varepsilon \)},
@@ -113,9 +113,39 @@ Die Gesamtvorhersage \( H \) des Boosting-Modells ergibt sich aus der gewichtete
 \end{equation}
     
 In anderen Worten wird die Vorhersage eines Lerners auf den Daten \( h_t(x) \) mit seiner Gewichtung \( \alpha \) multipliziert. Die Summe dieses Produkts für alle Lerner \( T \) ergibt die Gesamtvorhersage \( H \). Hier wird lediglich noch die Signum-Funktion angewendet, um den Wert zwischen 0 und 1 zu glätten.
+
+% Plot der Signum-Funktion
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=0.75]
+    \begin{axis}[
+        title={Plot der Signum-Funktion},
+        xlabel={x},
+        ylabel={sign(x)},
+        xmin=-2, xmax=2,
+        ymin=-2, ymax=2,
+        grid=both,
+        axis lines=middle,
+        ytick={-1,0,1},
+        xtick={-2,-1,0,1,2}
+    ]
     
+    \addplot[
+        domain=-2:2, 
+        samples=50, 
+        color=blue,
+        jump mark left,
+    ]
+    {sign(x)};
+    
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Visualisierung der Signum-Funktion}
+    \label{fig:signum_function}
+\end{figure}
 
 \subsection{Annahme des schwache Lernens}
-Die Voraussetzung jedes Boosting-Algorithmus ist ein bereits vorhandener schwacher Lernalgorithmus. Das Ziel ist es dann, durch mehrfache Ausführung des Boosting-Algorithmus' die Leistung des Lernalgorithmus zu verbessern, bzw. zu `boosten'. Laut \textcite[S. S.~4]{SchapireFreund2012} reicht es aus geringe Ansprüche an die Leistung der schwachen Lerner zu stellen. Es ist völlig hinreichend, wenn der Lernalgorithmus Hypothesen liefert mit etwas besseren Ergebnissen als 50\% Fehlerquote, was dem uninformierten Raten gleich käme.
+\label{sec:assumptionOfWeakLearning}
+Die Voraussetzung jedes Boosting-Algorithmus ist ein bereits vorhandener schwacher Basis-Lernalgorithmus. Das Ziel ist es dann, durch mehrfache Ausführung des Boosting-Algorithmus' die Leistung des Lernalgorithmus zu verbessern, bzw. zu `boosten'. Laut \textcite[S. S.~4]{SchapireFreund2012} reicht es aus geringe Ansprüche an die Leistung der schwachen Lerner zu stellen. Es ist völlig hinreichend, wenn der Lernalgorithmus Hypothesen liefert mit etwas besseren Ergebnissen als 50\% Fehlerquote, was dem uninformierten Raten gleich käme.
 \newline
 Diese Annahme, dass der Lerner schwache Hypothesen hervorbringt, die mindestens etwas besser sind als zufälliges Raten, wird die \textit{Annahme des schwachen Lernens genannt}.

@@ -21,6 +21,14 @@
 \usepackage{glossaries}
 \usepackage{mdframed}
 \usepackage{pgfplots}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[normalem]{ulem}
+\usepackage{wrapfig}
+
 
 
 %%| SET PACKAGE PARAMETERS HERE |%%
@@ -43,6 +51,13 @@
 \addbibresource{Document/Bibliography/ref.bib}
 \makeglossaries
 \pgfplotsset{compat=1.17}
+\renewcommand{\listalgorithmname}{Algorithmenverzeichnis}
+% Definiere den Namen für \autoref für Algorithmen
+\providecommand*{\algorithmname}{Algorithmus}
+\providecommand*{\algorithmautorefname}{Algorithmus}
+\useunder{\uline}{\ul}{}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%| TITLE PAGE |%%
@@ -58,7 +73,7 @@
             Studiengang:        & \quad Informatik Bachelor             &       \\[2ex]
             Semester:           & \quad Wintersemester 2023                             &       \\[2ex]
             Dozent:             & \quad Prof. Dr. Baier                       &       \\[2ex]
-            Bearbeitet am:      & \quad 1. Dezember 2023                             &       \\[2ex]
+            Bearbeitet am:      & \quad 26. November 2023                             &       \\[2ex]
         \end{tabular}
     \end{center}
 \end{titlepage}
@@ -102,5 +117,8 @@
 \newpage
 \listoftables
 \addcontentsline{toc}{section}{Tabellenverzeichnis}
+\newpage
+\listofalgorithms
+\addcontentsline{toc}{section}{Algorithmenverzeichnis}
 
 \end{document}
