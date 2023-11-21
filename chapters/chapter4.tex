@@ -86,7 +86,14 @@ Im Trainingssatz gibt es 10 Datenpunkte \( i \), die entweder durch ein blaues D
 \newline
 Unter der Annahme des schwachen Lernens aus \autoref{sec:assumptionOfWeakLearning} nehmen wir an, dass der genutzte schwache Lernalgorithmus die Fläche entweder horizontal, oder vertikal mit einer Linie teilt. Die Hypothese \( h_1 \) der 1. Iteration identifiziert 7 von 10 Datenpunkten richtig und hat somit eine Fehlerquote \( \epsilon_1 \) von 0.30. Tatsächlich gibt es keine Linie, die alle Formen richtig zuweisen kann, 7 von 10 ist also ein passables Ergebnis.
 \newline
-Die falsch klassifizierten Dreiecke 2-4 werden durch \( h_1 \) falsch klassifiziert und werden für Iteration 2 angepasst. 
+Die aus der Fehlerquote \( \epsilon_1 \) berechnete Gewichtung \( \alpha_1 \) beträgt 0.42. Es lässt sich erkennen, dass die falsch klassifizierten Dreiecke 2-4 eine Erhöhung ihrer Gewichte mit dem Faktor \( e^{-\alpha_1 y_i h_1(x_i)} \), der ungefähr 1.53 beträgt, erfahren, während die richtig klassifizierten Formen durch einen Faktor von etwa 0.65 eine Verringerung ihrer Gewichte erfahren.
+\newline
+Die aktualisierten Gewichte \( D_2(i) \) für die zweite Iteration ergeben sich als Produkt der vorherigen Gewichte \( D_1(i) \) und des Faktors \( e^{-\alpha_1 y_i h_1(x_i)} \). Diese neuen Gewichte werden dann durch den Normalisierungsfaktor \( Z_1 \approx 0.92 \) geteilt, um sicherzustellen, dass die Gesamtsumme aller \( D_t \) gleich 1 bleibt.
+\newline
+\newline
+Diese Abfolge an Schritten aus \autoref{algo:adaboost} wiederholt sich in jeder Iteration. In diesem Beispiel gibt es insgesamt drei Iterationen. Nach der 3. Iteration werden die Hyptohesen \( h \) mit ihrer Gewichtung \( \alpha \) in der finalen Hypthese \( H \) zusammengefasst.
+\newline
+Wie aus \autoref{fig:adaboost_schematic} hervorgeht, reichen drei Iterationen aus, um einen starken Lerner hervorzubringen, welches alle Datenpunkte \( i \) richtig klassifiziert. Es ist unerwartet, dass die Fehlerrate auf den Trainingsdaten so rapide abnimmt. Der exponentielle Abstieg der Fehlerquote ist tatsächlich typisch für AdaBoost. Dies ist eine der Eigenschaften die viele Boosting-Algorithmen so gebräuchlich machen. 
 
 \begin{table}[H]
     \caption[Berechnungen für \autoref{fig:adaboost_schematic}]{Berechnungen für \autoref{fig:adaboost_schematic} gemäß \autoref{algo:adaboost} nach Vorlage von \textcite[Tabelle 1.1][S.~9]{SchapireFreund2012}}
@@ -96,13 +103,13 @@ Die falsch klassifizierten Dreiecke 2-4 werden durch \( h_1 \) falsch klassifizi
                                                   & 1    & 2          & 3          & 4          & 5          & 6          & 7          & 8          & 9          & 10   &                             \\ \hline
     \( D_1(i) \)                                  & 0.10 & {\ul 0.10} & {\ul 0.10} & {\ul 0.10} & 0.10       & 0.10       & 0.10       & 0.10       & 0.10       & 0.10 & \( \epsilon_1 = 0.30 \)     \\
     \( e^{-\alpha_1 y_i h_1(x_i)} \)              & 0.65 & 1.53       & 1.53       & 1.53       & 0.65       & 0.65       & 0.65       & 0.65       & 0.65       & 0.65 & \( \alpha_1 \approx 0.42 \) \\
-    \( D_2(i) \cdot e^{-\alpha_1 y_i h_1(x_i)} \) & 0.07 & 0.15       & 0.15       & 0.15       & 0.07       & 0.07       & 0.07       & 0.07       & 0.07       & 0.07 & \( Z_1 \approx 0.92 \)      \\ \hline
-    \( D_1(i) \)                                  & 0.07 & 0.17       & 0.17       & 0.17       & 0.07       & 0.07       & {\ul 0.07} & {\ul 0.07} & {\ul 0.07} & 0.07 & \( \epsilon_1 = 0.21 \)     \\
-    \( e^{-\alpha_2 y_i h_2(x_i)} \)              & 0.52 & 0.52       & 0.52       & 0.52       & 0.52       & 0.52       & 1.91       & 1.91       & 1.91       & 0.52 & \( \alpha_1 \approx 0.65 \) \\
-    \( D_2(i) \cdot e^{-\alpha_2 y_i h_2(x_i)} \) & 0.04 & 0.09       & 0.09       & 0.09       & 0.04       & 0.04       & 0.14       & 0.14       & 0.14       & 0.04 & \( Z_1 \approx 0.82 \)      \\ \hline
-    \( D_3(i) \)                                  & 0.05 & 0.11       & 0.11       & 0.11       & {\ul 0.05} & {\ul 0.05} & 0.17       & 0.17       & 0.17       & 0.05 & \( \epsilon_1 = 0.10 \)     \\
-    \( e^{-\alpha_2 y_i h_2(x_i)} \)              & 0.33 & 0.33       & 0.33       & 0.33       & 3.00       & 3.00       & 0.33       & 0.33       & 0.33       & 0.33 & \( \alpha_1 \approx 1.10 \) \\
-    \( D_3(i) \cdot e^{-\alpha_3 y_i h_3(x_i)} \) & 0.02 & 0.04       & 0.04       & 0.04       & 0.15       & 0.15       & 0.06       & 0.06       & 0.06       & 0.02 & \( Z_1 \approx 0.64 \)      \\ \hline
+    \( D_1(i) \cdot e^{-\alpha_1 y_i h_1(x_i)} \) & 0.07 & 0.15       & 0.15       & 0.15       & 0.07       & 0.07       & 0.07       & 0.07       & 0.07       & 0.07 & \( Z_1 \approx 0.92 \)      \\ \hline
+    \( D_2(i) \)                                  & 0.07 & 0.17       & 0.17       & 0.17       & 0.07       & 0.07       & {\ul 0.07} & {\ul 0.07} & {\ul 0.07} & 0.07 & \( \epsilon_2 = 0.21 \)     \\
+    \( e^{-\alpha_2 y_i h_2(x_i)} \)              & 0.52 & 0.52       & 0.52       & 0.52       & 0.52       & 0.52       & 1.91       & 1.91       & 1.91       & 0.52 & \( \alpha_2 \approx 0.65 \) \\
+    \( D_2(i) \cdot e^{-\alpha_2 y_i h_2(x_i)} \) & 0.04 & 0.09       & 0.09       & 0.09       & 0.04       & 0.04       & 0.14       & 0.14       & 0.14       & 0.04 & \( Z_2 \approx 0.82 \)      \\ \hline
+    \( D_3(i) \)                                  & 0.05 & 0.11       & 0.11       & 0.11       & {\ul 0.05} & {\ul 0.05} & 0.17       & 0.17       & 0.17       & 0.05 & \( \epsilon_3 = 0.10 \)     \\
+    \( e^{-\alpha_2 y_i h_2(x_i)} \)              & 0.33 & 0.33       & 0.33       & 0.33       & 3.00       & 3.00       & 0.33       & 0.33       & 0.33       & 0.33 & \( \alpha_3 \approx 1.10 \) \\
+    \( D_3(i) \cdot e^{-\alpha_3 y_i h_3(x_i)} \) & 0.02 & 0.04       & 0.04       & 0.04       & 0.15       & 0.15       & 0.06       & 0.06       & 0.06       & 0.02 & \( Z_3 \approx 0.64 \)      \\ \hline
     \end{tabular}
 \end{table}
 
