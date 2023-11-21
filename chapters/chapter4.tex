@@ -13,32 +13,39 @@ Dieser Prozess wird fortgesetzt, wobei jeder nachfolgende Lerner, darauf abzielt
 \begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{Images/Geron2017Abb7-7.png}
-    \caption{Sequentielles Training mit aktualisierten Gewichten der Datenpunkte bei AdaBoost nach \textcite[Abbildung 7-7][S.~192]{Geron2018}}
+    \caption[Sequentielles Training mit aktualisierten Gewichten der Datenpunkte bei AdaBoost]{Sequentielles Training mit aktualisierten Gewichten der Datenpunkte bei AdaBoost (Quelle: \textcite[Abbildung 7-7][S.~192]{Geron2018})}
     \label{fig:Geron2017Abb7-7}
 \end{figure}
 
 \subsection{Algorithmus-Struktur und Funktionsweise}
-Der AdaBoost-Algorithmus (siehe Algorithmus~\ref{fig:adaboost}) ist in mehrere Schritte unterteilt, welche im folgenden genau erklärt werden:
+Der AdaBoost-Algorithmus (siehe Algorithmus~\ref{algo:adaboost}) ist in mehrere Schritte unterteilt, welche im folgenden genau erklärt werden:
 
-\paragraph{Schritt 1: Initialisierung (Zeile 2)}
+\paragraph{Schritt 1: Initialisierung (Zeile 2)}\label{para:Initialisierung}
+\label{para:ada_algo_s1}
 Hier werden die Gewichte \( D_1(i) \) initial gleich verteilt. Das heißt, dass jeder Datenpunkt am Anfang das gleiche Gewicht hat, also gleich wichtig ist.
 
 \paragraph{Schritt 2: Iterationen (Zeile 3 bis 13)}
+\label{para:ada_algo_s2}
 Der Algorithmus durchläuft \( T \) Iterationen, in denen pro Durchlauf ein neuer schwacher Lerner trainiert und bewertet wird.
 
 \paragraph{Schritt 2.1: Training der schwachen Lerner (Zeile 4-5)}
+\label{para:ada_algo_s2.1}
 In jeder Iteration \( t \) wird ein schwacher Lerner \( h_t \) unter der aktuellen Gewichtungsverteilung \( D_t \) der Daten trainiert. Dieser Lerner erzeugt eine Hypothese zur Klassifizierung der Daten.
 
 \paragraph{Schritt 2.2: Fehlerberechnung (Zeile 6)}
+\label{para:ada_algo_s2.2}
 Der Fehler \( \varepsilon_t \) des Lerners wird berechnet als Anteil der falsch klassifizierten Beispiele, gewichtet nach \( D_t \). Weitere Details zur Fehlerberechnung sind in \autoref{sec:errorComputation} erläutert.
 
 \paragraph{Schritt 2.3: Gewichtung der Lerner (Zeile 7)}
+\label{para:ada_algo_s2.3}
 Die Gewichtung \( \alpha_t \) jedes schwachen Lerners basiert auf seinem Fehler \( \varepsilon_t \) und wird mithilfe der Formel \( \alpha_t = \frac{1}{2} \ln\left(\frac{1 - \varepsilon_t}{\varepsilon_t}\right) \) berechnet. Diese Gewichtung bestimmt den Einfluss jedes Lerners auf das Endergebnis. Genaueres dazu ist im \autoref{sec:weightedLearners} zu finden.
 
 \paragraph{Schritt 2.4: Aktualisierung der Gewichte (Zeile 8-12)}
+\label{para:ada_algo_s2.4}
 Die Gewichte der Datenpunkte \( D_t(i) \) werden für die nächste Iteration \( D_{t+1}(i) \) aktualisiert. Datenpunkte, die falsch klassifiziert wurden, erhalten ein höheres Gewicht, während korrekt klassifizierte Datenpunkte ein niedrigeres Gewicht bekommen. Die Aktualisierung erfolgt gemäß der Formel in Zeile 9. \( Z_t \) ist dabei ein Normalisierungsfaktor, der sicherstellt, dass \( D_{t+1} \) eine Wahrscheinlichkeitsverteilung bleibt.
 
 \paragraph{Schritt 3: Ausgabe der finalen Hypothese (Zeile 14)}
+\label{para:ada_algo_s3}
 Nach Abschluss aller Iterationen wird die finale Hypothese \( H(x) \) als gewichtete Summe der Hypothesen aller schwachen Lerner ausgegeben:
 \[
 H(x) = \text{sign}\left(\sum_{t=1}^{T} \alpha_t h_t(x)\right).
@@ -46,7 +53,7 @@ H(x) = \text{sign}\left(\sum_{t=1}^{T} \alpha_t h_t(x)\right).
 Diese Vorhersagefunktion repräsentiert das Endergebnis des AdaBoost-Algorithmus.
 
 \begin{algorithm}[H]
-    \caption{AdaBoost Algorithmus (nach Schapire und Freund, Algorithmus 1.1, S. 5)}\label{fig:adaboost}
+    \caption[AdaBoost Algorithmus]{AdaBoost Algorithmus (nach Schapire und Freund, Algorithmus 1.1, S. 5)}\label{algo:adaboost}
     \begin{algorithmic}[1]
     \State \textbf{Gegeben:} Trainingssatz \( (x_1,y_1), \dots, (x_m,y_m) \), wobei \( x_i \in X \), \( y_i \in \{-1, +1\} \)
     \State \textbf{Initialisierung:} \( D_1(i) = \frac{1}{m} \) für \( i = 1, \dots, m \)
@@ -66,10 +73,36 @@ Diese Vorhersagefunktion repräsentiert das Endergebnis des AdaBoost-Algorithmus
 \end{algorithm}
 
 \subsection{Anwendungsbeispiel}
-\begin{figure}[htbp]
+\begin{wrapfigure}{r}[10pt]{0.6\textwidth} % 'r' für rechts, '0.5\textwidth' für die Breite
     \centering
-    \includegraphics[width=\linewidth]{Images/adaBoostSchemaatic.png}
-    \caption[Schematische Darstellung des AdaBoost-Prozesses]{Schematische Darstellung des AdaBoost-Prozesses. Blaue Dreiecke und orange Quadrate repräsentieren die Datenpunkte der beiden Klassen. (Quelle: ResearchGate, Alex Henderson et al.)}
+    \includegraphics[width=0.5\textwidth]{Images/adaBoostSchemaatic.png}
+    \caption[Schematische Darstellung des AdaBoost-Prozesses]{Schematische Darstellung des AdaBoost-Prozesses (Quelle: ResearchGate, Alex Henderson et al.)}.
     \label{fig:adaboost_schematic}
-\end{figure}
-  
+  \end{wrapfigure}
+
+Um den doch eher abstrakten AdaBoost-\autoref{algo:adaboost} zu veranschaulichen, wird im folgenden die Funktionsweise anhand des Beispiels in \autoref{fig:adaboost_schematic} beschrieben. Die Werte der Berechnung sind in \autoref{tab:adaboost_schematic} zu finden. 
+\newline
+Im Trainingssatz gibt es 10 Datenpunkte \( i \), die entweder durch ein blaues Dreieck oder ein orangenes Viereck dargestellt sind. Wie gefordert, sind zu Beginn der 1. Iteration alle Datenpunkte  mit den gleichen Gewichten \( D_1 \) initialisiert, was  durch die gleiche Größe der geometrischen Formen veranschaulicht wird.
+\newline
+Unter der Annahme des schwachen Lernens aus \autoref{sec:assumptionOfWeakLearning} nehmen wir an, dass der genutzte schwache Lernalgorithmus die Fläche entweder horizontal, oder vertikal mit einer Linie teilt. Die Hypothese \( h_1 \) der 1. Iteration identifiziert 7 von 10 Datenpunkten richtig und hat somit eine Fehlerquote \( \epsilon_1 \) von 0.30. Tatsächlich gibt es keine Linie, die alle Formen richtig zuweisen kann, 7 von 10 ist also ein passables Ergebnis.
+\newline
+Die falsch klassifizierten Dreiecke 2-4 werden durch \( h_1 \) falsch klassifiziert und werden für Iteration 2 angepasst. 
+
+\begin{table}[H]
+    \caption[Berechnungen für \autoref{fig:adaboost_schematic}]{Berechnungen für \autoref{fig:adaboost_schematic} gemäß \autoref{algo:adaboost} nach Vorlage von \textcite[Tabelle 1.1][S.~9]{SchapireFreund2012}}
+    \label{tab:adaboost_schematic}
+    \begin{tabular}{l|llllllllll|l}
+    \hline
+                                                  & 1    & 2          & 3          & 4          & 5          & 6          & 7          & 8          & 9          & 10   &                             \\ \hline
+    \( D_1(i) \)                                  & 0.10 & {\ul 0.10} & {\ul 0.10} & {\ul 0.10} & 0.10       & 0.10       & 0.10       & 0.10       & 0.10       & 0.10 & \( \epsilon_1 = 0.30 \)     \\
+    \( e^{-\alpha_1 y_i h_1(x_i)} \)              & 0.65 & 1.53       & 1.53       & 1.53       & 0.65       & 0.65       & 0.65       & 0.65       & 0.65       & 0.65 & \( \alpha_1 \approx 0.42 \) \\
+    \( D_2(i) \cdot e^{-\alpha_1 y_i h_1(x_i)} \) & 0.07 & 0.15       & 0.15       & 0.15       & 0.07       & 0.07       & 0.07       & 0.07       & 0.07       & 0.07 & \( Z_1 \approx 0.92 \)      \\ \hline
+    \( D_1(i) \)                                  & 0.07 & 0.17       & 0.17       & 0.17       & 0.07       & 0.07       & {\ul 0.07} & {\ul 0.07} & {\ul 0.07} & 0.07 & \( \epsilon_1 = 0.21 \)     \\
+    \( e^{-\alpha_2 y_i h_2(x_i)} \)              & 0.52 & 0.52       & 0.52       & 0.52       & 0.52       & 0.52       & 1.91       & 1.91       & 1.91       & 0.52 & \( \alpha_1 \approx 0.65 \) \\
+    \( D_2(i) \cdot e^{-\alpha_2 y_i h_2(x_i)} \) & 0.04 & 0.09       & 0.09       & 0.09       & 0.04       & 0.04       & 0.14       & 0.14       & 0.14       & 0.04 & \( Z_1 \approx 0.82 \)      \\ \hline
+    \( D_3(i) \)                                  & 0.05 & 0.11       & 0.11       & 0.11       & {\ul 0.05} & {\ul 0.05} & 0.17       & 0.17       & 0.17       & 0.05 & \( \epsilon_1 = 0.10 \)     \\
+    \( e^{-\alpha_2 y_i h_2(x_i)} \)              & 0.33 & 0.33       & 0.33       & 0.33       & 3.00       & 3.00       & 0.33       & 0.33       & 0.33       & 0.33 & \( \alpha_1 \approx 1.10 \) \\
+    \( D_3(i) \cdot e^{-\alpha_3 y_i h_3(x_i)} \) & 0.02 & 0.04       & 0.04       & 0.04       & 0.15       & 0.15       & 0.06       & 0.06       & 0.06       & 0.02 & \( Z_1 \approx 0.64 \)      \\ \hline
+    \end{tabular}
+\end{table}
+

@@ -23,6 +23,11 @@
 \usepackage{pgfplots}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[normalem]{ulem}
+\usepackage{wrapfig}
 
 
 
@@ -47,6 +52,12 @@
 \makeglossaries
 \pgfplotsset{compat=1.17}
 \renewcommand{\listalgorithmname}{Algorithmenverzeichnis}
+% Definiere den Namen für \autoref für Algorithmen
+\providecommand*{\algorithmname}{Algorithmus}
+\providecommand*{\algorithmautorefname}{Algorithmus}
+\useunder{\uline}{\ul}{}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%| TITLE PAGE |%%
