@@ -1,4 +1,4 @@
-\section{Gradient Boosting (5-6 Seiten)}
+\section{Gradient Boosting}
 Der Gradient Boosting Trees (GBT) Algorithmus hat sich in den letzten Jahren als einer der führenden Boosting-Algorithmen etabliert. Charakteristisch für GBT ist die Verwendung von Entscheidungsbäumen als Basis-Lernalgorithmus. Ähnlich wie AdaBoost verfolgt GBT das Prinzip des adaptiven Lernens (\autoref{sec:adaptive_learning}), bei dem jeder nachfolgende Entscheidungsbaum darauf abzielt, die Fehler seines Vorgängers zu korrigieren.
 
 \subsection{Unterschied zu AdaBoost}
@@ -16,7 +16,6 @@ Im Rahmen von GBT wird häufig der Begriff "Pseudo-Residuen" verwendet. Diese we
     \label{eq:residuum_general}
     r_{i,m} = -\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\bigg|{F(x)=F{m-1}(x)}
 \end{equation}
-
 Im Gegensatz zu einfachen Residuen, welche den Fehler zwischen Vorhersage und tatsächlichem Wert angeben, gibt ein Pseudo-Residuum sowohl die Richtung als auch das Ausmaß der erforderlichen Anpassungen des Modells an. Bei GBT ist das besonders wichtig, da der in jeder Iteration hinzugefügte Entscheidungsbaum speziell darauf trainiert wird, diese Pseudo-Residuen zu minimieren.
 
 \subsubsection{Der Mittlere Quadratische Fehler (MSE)}
@@ -25,18 +24,13 @@ Eine häufig genutze Loss-Funktion bei GBT ist der mittlere quadratische Fehler 
 \begin{equation}
     L(y_i, F(x_i)) = \frac{1}{2}(y_i - F(x_i))^2 \label{eq:mse}
 \end{equation}
-
 Setzen wir den MSE in die \autoref{eq:residuum_general} für Residuen ein, ergibt sich nach \textcite[S.~346]{Frochte2020}
 
 \begin{equation}
     \label{eq:residuum_mse}
     r_{i,m} = y_i-F_{m-1}(x_i)
 \end{equation}
-
 Die \autoref{eq:residuum_mse} ist zwar nicht mehr so allgemein anwendbar wie \autoref{eq:residuum_general}, ist aber durch die Spezialisierung auf den MSE (\autoref{eq:mse}) deutlich anschaulicher und leichter zu verstehen.
-
-
-
 
 \subsection{Algorithmus-Struktur und Funktionsweise}
 Der folgende Abschnitt erklärt die einzelnen Schritte des GBT-Algorithmus (siehe \autoref{algo:gbt}):
@@ -51,15 +45,15 @@ Der Hauptteil des Algorithmus ist die Erstellung von Entscheidungsbäumen, welch
 In jeder Iteration \( m \) werden die Residuen \( r_{m,i} \) für jeden Datenpunkt \( i \) berechnet. Wie in \autoref{sec:loss_funtion} erklärt, zeigen letztere die Abweichung der tatsächlichen Werte \( y_i \) von den Vorhersagen des aktuellen Modells \( F_{m-1}(x_i) \) auf. Die in \autoref{algo:gbt} dafür verwendete Loss-Funktion ist der in MSE (\ref{eq:mse}.)
 
 \paragraph{Schritt 2.2: Training eines neuen Entscheidungsbaums (Zeile 5)}
+\label{para:GBT_training_tree}
 In diesem Schritt wird ein neuer Entscheidungsbaum \( h_t \) trainiert, wobei der Fokus nicht auf den ursprünglichen Zielwerten der Trainingsdaten \( (y_i) \), sondern auf den Residuen \( r_{m,i} \) liegt. Jeder Datenpunkt \( (x_i, y_i) \) wird also durch das Paar \( (x_i, r_{m,i}) \) ersetzt, wobei \( r_{m,i} \) das Pseudo-Residuum ist.
-
-
+\newline
 Dies bedeutet konkret, dass der Entscheidungsbaum nicht darauf trainiert wird, die eigentlichen Zieldaten \( y \) direkt vorherzusagen. Stattdessen lernt der Baum, die Fehler des aktuellen Modells, also die Residuen, zu korrigieren. Dadurch das der Baum lediglich die Fehler korrigiert, ergibt es hingegen zu AdaBoost keinen Sinn ihn einzeln zu betrachten. Lediglich im Zusammenhang des Gesamtmodells ist die Hypothese relevant.
 
 \paragraph{Schritt 2.4: Aktualisierung des Modells (Zeile 6)}
 Das Modell wird in jedem Schritt verbessert, indem der neue Entscheidungsbaum \( h_m(x) \) zum bisherigen Modell \( F_{t-1}(x) \) mit der Gewichtung \( \alpha \) hinzugefügt wird. Statt als Lernrate einen festen Hyperparamter \( \alpha \) zu benutzen, gibt es auch wie in \textcite[S.~345]{Frochte2020} die Möglichkeit diesen dynamisch zu berechnen. Meist dann mit \( \gamma \) bezeichnet ist der Wert meist für jeden Baum unterschiedlich. Für die Suche nach \( \gamma \) kann beispielsweise Linearsuche verwendet werden.
-
-
+\newline
+\newline
 Während die Verwendung von \( \alpha \) bedeutet, dass jeder Baum gleichgewichtet ist, lässt sich mit \( \gamma \) feinere und damit auch effizientere Anpassungen am Gesamtmodell machen. Dies ist natürlich aber auch mit einem höheren Rechenaufwand verbunden.
 
 \paragraph{Schritt 3: Ausgabe des finalen Modells (Zeile 8)}
@@ -80,3 +74,27 @@ Nach \( M \) Iterationen steht das finale Modell \( F_M(x) \) fest. Es fasst die
 \end{algorithm}
 
 \subsection{Beispielanwendung mit Erläuterung}
+Um den doch eher abstrakten GBT-\autoref{algo:gbt} zu veranschaulichen, wird im folgenden die Funktionsweise anhand des Beispiels in \autoref{fig:gbt-example} beschrieben.
+\newline
+Die Visualisierung, sowie die verwendeten Daten wurden mithilfe von SKLearn in python erstellt und sind auf meinem \href{https://github.com/CodeLtDave/Boosting-Algorithms-ML-Seminararbeit/blob/main/python-env/GBT-Example.ipynb}{GitHub} zu finden. Wir betrachten den folgenden synthetischen Datensatz als gegeben:
+
+\begin{verbatim}
+X, y = make_regression(n_samples=100, n_features=1, noise=10, random_state=42)
+X_sorted, X_indices = np.sort(X, axis=0), np.argsort(X, axis=0)
+\end{verbatim}
+Wie im oberen Bild der \autoref{fig:gbt-example} zu erkennen ist, wird im Schritt der Initialisierung zunächst das Basismodell aus dem Durchschnitt der Zielwerte gebildet. Wie zu erwarten, hat das Basismodell keine wirkliche Aussage über die Zieldaten mit einem MSE von 1690.
+\newline
+\newline
+In der ersten Iteration wird dann eine erste Vorhersage auf die Daten getroffen. Für diese Iteration stehen natürlich noch keine Residuen des Vorgängermodells zur Verfügung, weshalb sich die Punkte der Daten und Residuen decken. Schon nach einer Iteration nimmt die Vorhersage die ungefähre Form der Daten an. Alleine in diesem Schritt kann der MSE um das 5-fache reduziert werden.
+\newline
+Hier lässt sich zum ersten mal das Prinzip der Residuen veranschaulichen. Nehmen wir als Beispiel den einzelnen Datenpunkt in der unteren linken Ecke. Die Gesamtvorhersage der ersten Iteration hat eine Abweichung von ca. 80. Genau diese Abweichung von ca. 80 spiegelt sich dann für die zweite Iteration bei dem Residuum in der unteren linken Ecke wieder. In der zugehörigen Baumvorhersage lässt sich auch erkennen, dass sie deutlich besser auf die Residuen passt als die Ursprungsdaten. Trotzdem lässt sich in diesem Schritt der MSE fast halbieren. Dies veranschaulicht die Argumentation aus \hyperref[para:GBT_training_tree]{Schritt 2.2}.
+\newline
+\newline
+Nach der dritten Iteration entspricht die Gesamtvorhersage ziemlich genau den Daten mit einem verbleibenden MSE von 89. Die Schrittweise Verbesserung des Modells lässt sich neben dem Offensichlichen auch durch eine weitere Beobachtung erklären. In jeder Iteration nähren sich die Residuen der X-Achse an. Nach einer unbekannten Iteration von Schritten ist davon auszugehen, dass wenn die Gesamthypothese die Daten perfekt abbildet, sich alle Residuen auf der X-Achse befinden.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Images/GBT_Example.png}
+    \caption[Visualisierung des Gradient Boosting Trees Algorithmus]{Visualisierung des Gradient Boosting Trees Algorithmus.}
+    \label{fig:gbt-example}
+\end{figure}
