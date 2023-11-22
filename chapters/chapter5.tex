@@ -3,103 +3,67 @@ Der Gradient Boosting Trees (GBT) Algorithmus hat sich in den letzten Jahren als
 
 \subsection{Unterschied zu AdaBoost}
 Der entscheidende Unterschied zu AdaBoost \ref{sec:adaptive_learning} liegt jedoch in der Art und Weise, wie GBT die Trainingsdaten behandelt. Während AdaBoost die Gewichtung aller Trainingsdaten anpasst, um die Fehler des vorherigen Lerners hervorzuheben, beschränkt sich GBT auf die Redzierung des Restfehlers.
-Genauer gesagt bedeutet dies, dass jeder neue Baum auf den Residuen (Unterschiede zwischen den tatsächlichen und den vorhergesagten Werten) des vorherigen trainiert wird.
 \newline
-Obwohl GBT sowohl für Klassifikations- als auch für Regressionsprobleme einsetzbar ist, konzentriert sich diese Arbeit hauptsächlich auf die Anwendung von GBT im Kontext der Regression. 
-Der Grund dafür ist, dass GBT deutlich einfach verständlich ist in der Art und Weise, wie er kontinuierliche Werte vorhersagt.
-\newline
+Obwohl GBT sowohl für Klassifikations- als auch für Regressionsprobleme einsetzbar ist, konzentriert sich diese Arbeit hauptsächlich auf die Anwendung von GBT im Kontext der Regression. Der Grund dafür ist, dass GBT deutlich einfacher verständlich ist in der Art und Weise, wie er kontinuierliche Werte vorhersagt.
+
 
 \subsection{Die Loss-Funktion \( L \)}
-Ein wesentlicher Bestandteil des Gradient Boosting Trees (GBT) Algorithmus ist die Loss-Funktion, die zur Bewertung der Modellgenauigkeit eingesetzt wird. In GBT wird häufig die Mean Squared Error (MSE) Loss-Funktion verwendet. Diese berechnet die quadratische Differenz zwischen den tatsächlichen Werten \( y \) und den vom Modell vorhergesagten Werten \( F(x) \):
+\label{sec:loss_funtion}
+Ein wesentlicher Bestandteil des Gradient Boosting Trees Algorithmus ist die Loss-Funktion \( L(y_i,F(x)) \), welche zur Bewertung der Genauigkeit des Modells genutzt wird. Einen zentralen Teil dabei spielen die Residuen. Ein Residuum ist umgangssprachlich ein Fehler, also die Differenz zwischen einem tatsächlichen Datenpunkt \( y_i \) und dem dazu aus dem Modell vorhergesagten Wert \( F(x_i) \).
+Im Rahmen von GBT wird häufig der Begriff "Pseudo-Residuen" verwendet. Diese werden in jeder Iteration \( m \) des Algorithmus berechnet und sind definiert als der negative Gradient der Loss-Funktion bezüglich der Modellvorhersage:
 
 \begin{equation}
-    L(y, F(x)) = \frac{1}{2}(y - F(x))^2
+    \label{eq:residuum_general}
+    r_{i,m} = -\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\bigg|{F(x)=F{m-1}(x)}
 \end{equation}
 
-Die Division durch 2 dient der Vereinfachung der Berechnung des Gradienten, welcher für die Anpassung des Modells benötigt wird.
+Im Gegensatz zu einfachen Residuen, welche den Fehler zwischen Vorhersage und tatsächlichem Wert angeben, gibt ein Pseudo-Residuum sowohl die Richtung als auch das Ausmaß der erforderlichen Anpassungen des Modells an. Bei GBT ist das besonders wichtig, da der in jeder Iteration hinzugefügte Entscheidungsbaum speziell darauf trainiert wird, diese Pseudo-Residuen zu minimieren.
 
-Ein zentrales Konzept im GBT ist das der Residuen. Residuen bezeichnen die Differenz zwischen den tatsächlichen Datenpunkten \( y_i \) und den durch das Modell vorhergesagten Werten \( F(x_i) \). Sie geben Aufschluss darüber, wie weit das aktuelle Modell von den realen Daten abweicht.
-
-Im Kontext des GBT spricht man oft von Pseudo-Residuen. Diese werden für jede Iteration \( m \) des Algorithmus berechnet und sind definiert als die negative Ableitung der Loss-Funktion bezüglich der Modellvorhersagen:
+\subsubsection{Der Mittlere Quadratische Fehler (MSE)}
+Eine häufig genutze Loss-Funktion bei GBT ist der mittlere quadratische Fehler (Mean squared error, MSE). Gerade für Regressionsprobleme eignet sich die Loss-Funktion MSE besonders und ist  definiert als:
 
 \begin{equation}
-    r_{i,m} = -\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\bigg|_{F(x)=F_{m-1}(x)}
+    L(y_i, F(x_i)) = \frac{1}{2}(y_i - F(x_i))^2 \label{eq:mse}
 \end{equation}
 
-Für die MSE Loss-Funktion vereinfacht sich dies zu:
+Setzen wir den MSE in die \autoref{eq:residuum_general} für Residuen ein, ergibt sich nach \textcite[S.~346]{Frochte2020}
 
 \begin{equation}
-    r_{i,m} = y_i - F_{m-1}(x_i)
+    \label{eq:residuum_mse}
+    r_{i,m} = y_i-F_{m-1}(x_i)
 \end{equation}
 
-Das Pseudo-Residuum repräsentiert somit den Fehler des aktuellen Modells \( F_{m-1}(x) \) bei der Vorhersage des tatsächlichen Wertes \( y_i \). Im Gegensatz zum einfachen Residuum, welches nur den Fehler angibt, reflektiert das Pseudo-Residuum die Richtung und das Ausmaß der erforderlichen Anpassung des Modells. Dies ist entscheidend für den GBT-Algorithmus, da in jedem Schritt ein neuer Entscheidungsbaum trainiert wird, um genau diese Pseudo-Residuen zu minimieren.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Die \autoref{eq:residuum_mse} ist zwar nicht mehr so allgemein anwendbar wie \autoref{eq:residuum_general}, ist aber durch die Spezialisierung auf den MSE (\autoref{eq:mse}) deutlich anschaulicher und leichter zu verstehen.
 
 
 
 
 \subsection{Algorithmus-Struktur und Funktionsweise}
-Der GBT-Algorithmus (siehe \autoref{algo:gbt} ist in mehrere Schritte unterteilt, welche im folgenden genau erklärt werden:
-
-
-\subsection{Algorithmus-Struktur und Funktionsweise}
-Der Gradient Boosting Trees Algorithmus, im Folgenden GBT genannt, ist ein komplexer, aber hochgradig effektiver Boosting-Algorithmus. Der folgende Abschnitt erklärt die einzelnen Schritte des GBT-Algorithmus (siehe Algorithmus~\ref{algo:gbt}):
+Der folgende Abschnitt erklärt die einzelnen Schritte des GBT-Algorithmus (siehe \autoref{algo:gbt}):
 
 \paragraph{Schritt 1: Initialisierung (Zeile 2)}\label{para:GBT_Initialisierung}
-\label{para:gbt_algo_s1}
-Zu Beginn wird ein Basismodell \( F_0(x) \) erstellt, welches oft der Durchschnitt oder Median der Zielwerte \( y \) ist. Dieses Modell bildet den Ausgangspunkt für die iterativen Verbesserungen.
+Zu Beginn wird ein Basismodell \( F_0(x) \) erstellt. Häufig, wie auch in dem dargestellten \autoref{algo:gbt}, ist \( F_0(x) \) eine Konstante, die sich aus dem Durchschnitt der Zielwerte \( y\) bildet. Der Hintergrund dafür ist, dass ein solches Basismodell einen guten Ausgangspunkt für die Optimierung bietet, da es bereits eine grundlegende Schätzung der Zielwerte liefert. Diese erste Schätzung wird dann in  folgenden Iterationen verbessert.
 
 \paragraph{Schritt 2: Iterationen (Zeile 3 bis 7)}
-\label{para:gbt_algo_s2}
-Im Kern des GBT-Algorithmus stehen iterative Schritte, die darauf abzielen, das aktuelle Modell schrittweise zu verbessern. Diese Iterationen laufen über einen vordefinierten Zeitraum \( T \).
+Der Hauptteil des Algorithmus ist die Erstellung von Entscheidungsbäumen, welchen dann dem Gesamtbaum hinzugefügt werden. Dies passiert über insgesamt \( M \) Iterationen.
 
 \paragraph{Schritt 2.1: Berechnung der Residuen (Zeile 4)}
-\label{para:gbt_algo_s2.1}
-In jeder Iteration \( t \) werden die Residuen \( r_{t,i} \) für jeden Datenpunkt \( i \) berechnet. Diese Residuen repräsentieren die Differenz zwischen den tatsächlichen Werten \( y_i \) und den Vorhersagen des aktuellen Modells \( F_{t-1}(x_i) \).
+In jeder Iteration \( m \) werden die Residuen \( r_{m,i} \) für jeden Datenpunkt \( i \) berechnet. Wie in \autoref{sec:loss_funtion} erklärt, zeigen letztere die Abweichung der tatsächlichen Werte \( y_i \) von den Vorhersagen des aktuellen Modells \( F_{m-1}(x_i) \) auf. Die in \autoref{algo:gbt} dafür verwendete Loss-Funktion ist der in MSE (\ref{eq:mse}.)
 
-\paragraph{Schritt 2.2: Training der Entscheidungsbäume (Zeile 5)}
-\label{para:gbt_algo_s2.2}
-Ein neuer Entscheidungsbaum \( h_t \) wird auf den Residuen trainiert. Jeder Baum fokussiert sich darauf, die Fehler des vorherigen Modells zu minimieren.
+\paragraph{Schritt 2.2: Training eines neuen Entscheidungsbaums (Zeile 5)}
+In diesem Schritt wird ein neuer Entscheidungsbaum \( h_t \) trainiert, wobei der Fokus nicht auf den ursprünglichen Zielwerten der Trainingsdaten \( (y_i) \), sondern auf den Residuen \( r_{m,i} \) liegt. Jeder Datenpunkt \( (x_i, y_i) \) wird also durch das Paar \( (x_i, r_{m,i}) \) ersetzt, wobei \( r_{m,i} \) das Pseudo-Residuum ist.
 
-\paragraph{Schritt 2.3: Optimierung des Multiplikators (Zeile 6)}
-\label{para:gbt_algo_s2.3}
-Für jeden Baum wird ein Multiplikator \( \gamma_t \) gefunden, der den Einfluss des Baumes auf das Gesamtmodell optimal anpasst. Dies kann beispielsweise durch eine Linearsuche erfolgen.
 
-\paragraph{Schritt 2.4: Aktualisierung des Modells (Zeile 7)}
-\label{para:gbt_algo_s2.4}
-Das Modell wird durch Hinzufügen des neuen, gewichteten Entscheidungsbaumes \( \gamma_t h_t(x) \) zum aktuellen Modell \( F_{t-1}(x) \) aktualisiert. Dadurch wird das Modell iterativ verbessert.
+Dies bedeutet konkret, dass der Entscheidungsbaum nicht darauf trainiert wird, die eigentlichen Zieldaten \( y \) direkt vorherzusagen. Stattdessen lernt der Baum, die Fehler des aktuellen Modells, also die Residuen, zu korrigieren. Dadurch das der Baum lediglich die Fehler korrigiert, ergibt es hingegen zu AdaBoost keinen Sinn ihn einzeln zu betrachten. Lediglich im Zusammenhang des Gesamtmodells ist die Hypothese relevant.
+
+\paragraph{Schritt 2.4: Aktualisierung des Modells (Zeile 6)}
+Das Modell wird in jedem Schritt verbessert, indem der neue Entscheidungsbaum \( h_m(x) \) zum bisherigen Modell \( F_{t-1}(x) \) mit der Gewichtung \( \alpha \) hinzugefügt wird. Statt als Lernrate einen festen Hyperparamter \( \alpha \) zu benutzen, gibt es auch wie in \textcite[S.~345]{Frochte2020} die Möglichkeit diesen dynamisch zu berechnen. Meist dann mit \( \gamma \) bezeichnet ist der Wert meist für jeden Baum unterschiedlich. Für die Suche nach \( \gamma \) kann beispielsweise Linearsuche verwendet werden.
+
+
+Während die Verwendung von \( \alpha \) bedeutet, dass jeder Baum gleichgewichtet ist, lässt sich mit \( \gamma \) feinere und damit auch effizientere Anpassungen am Gesamtmodell machen. Dies ist natürlich aber auch mit einem höheren Rechenaufwand verbunden.
 
 \paragraph{Schritt 3: Ausgabe des finalen Modells (Zeile 8)}
-\label{para:gbt_algo_s3}
-Nach Abschluss aller Iterationen wird das finale Modell \( F_T(x) \) als das Ergebnis des GBT-Algorithmus ausgegeben. Dieses Modell ist die Summe aller gewichteten Entscheidungsbäume und repräsentiert die kumulativen Verbesserungen über alle Iterationen.
-
-\begin{algorithm}[H]
-    \caption[Gradient Boosting Trees Algorithmus]{Gradient Boosting Trees Algorithmus (nach \textcite[S.~346]{Frochte2020})}\label{algo:gbt}
-    \begin{algorithmic}[1]
-    \State \textbf{Gegeben:} Trainingsdatensatz \( (x_1,y_1), \dots, (x_m,y_m) \)
-    \State \textbf{Initialisierung:} Initialisiere das Modell mit einem konstanten Wert \( F_0(x) = \frac{1}{n} \sum_{i=1}^{n} y_i \)
-    \For{\( t = 1, \dots, T \)}
-        \State Berechne Residuen \( r_{t,i} = y_i - F_{t-1}(x_i) \) für alle \( i \)
-        \State Trainiere einen Entscheidungsbaum \( h_t \) auf \( (x_i, r_{t,i}) \)
-        \State Finde den besten Multiplikator \( \alpha_t \) für \( h_t(x) \), z.B. durch Linearsuche
-        \State Aktualisiere das Modell: \( F_t(x) = F_{t-1}(x) + \alpha_t \cdot h_t(x) \)
-    \EndFor
-    \State \textbf{Ausgabe:} Das endgültige Modell \( F_T(x) \)
-    \end{algorithmic}
-\end{algorithm}
+Nach \( M \) Iterationen steht das finale Modell \( F_M(x) \) fest. Es fasst die kumulativen Verbesserungen aller Entscheidungsbäume zusammen und vereint damit alle Verbesserungen zur Anpassung auf die Zieldaten \(y\).
 
 \begin{algorithm}[H]
     \caption[MSE Gradient Tree Boosting]{MSE Gradient Tree Boosting (nach \textcite[S.~346]{Frochte2020})}\label{algo:gbt}
@@ -107,16 +71,12 @@ Nach Abschluss aller Iterationen wird das finale Modell \( F_T(x) \) als das Erg
     \State \textbf{Gegeben:} Trainingsdatensatz \( (x_1,y_1), \dots, (x_n,y_n) \)
     \State \textbf{Initialisierung:} Starte mit einem Basismodell \( F_0(x) \), z.B. dem Mittelwert der Labels \( y \)
     \For{\( m = 1, \dots, M \)}
-        \State Berechne das Pseudo-Residuum \( r_{i,m} = y_i - F_{m-1}(x_i) \) für alle \( i \)
-        \State Trainiere einen Entscheidungsbaum \( h_m \) auf \( (x_i, r_{i,m}) \)
+        \State Berechne die Pseudo-Residuen \( r_{i,m} = y_i - F_{m-1}(x_i) \) für alle \( i \)
+        \State Trainiere einen Entscheidungsbaum \( h_m \) auf \( (x_i, r_{i,m})_{i=1}^n \)
         \State Führe das Update durch: \( F_m(x) = F_{m-1}(x) + \alpha \cdot h_m(x) \)
     \EndFor
     \State \textbf{Ausgabe:} Das endgültige Modell \( F_M(x) \)
     \end{algorithmic}
 \end{algorithm}
-
-
-
-
 
 \subsection{Beispielanwendung mit Erläuterung}
