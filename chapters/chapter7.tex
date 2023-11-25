@@ -37,14 +37,15 @@ Overfitting beschreibt das Phänomen, dass durch viele Trainingsiterationen das 
     
     \end{axis}
     \end{tikzpicture}
-    \caption{Hypothetische Darstellung von Overfitting: Während der Trainingsfehler mit zunehmenden Iterationen abnimmt, beginnt der Testfehler nach einem gewissen Punkt wieder zu steigen.}
+    \caption[Hypothetische Darstellung von Overfitting]{Hypothetische Darstellung von Overfitting: Während der Trainingsfehler mit zunehmenden Iterationen abnimmt, beginnt der Testfehler nach einem gewissen Punkt wieder zu steigen.}
 \end{figure}
 
 
 \subsection{AdaBoost und die Herausforderung des Overfittings}
-In \textcite[Kapitel 1.2.3]{SchapireFreund2012} wird das Phänomen des Overfitting für AdaBoost gezeigt. Trotz dieses theoretischen Hintergrunds war es mir in meinen praktischen Experimenten mit der SKLearn-Bibliothek in Python nicht möglich, Overfitting bei AdaBoost zu reproduzieren. Meine unzähligen Versuche mit unterschiedlichsten Anpassungen führten nicht zu den erwarteten Ergebnissen. Dies führt zu der Frage, warum AdaBoost in meinen Experimenten anscheinend resistent gegen Overfitting war. Der folgende Teil ist meine Theorie zu diesem Phänomen und entspricht nicht zwangsweise dem tatsächlichen Grund. Der genaue Code ist auf meinem \textbf{\href{https://github.com/CodeLtDave/Boosting-Algorithms-ML-Seminararbeit/blob/main/python-env/ToleranceOverfittingAdaBoost.ipynb}{GitHub}} zu finden.
+In \textcite[Kapitel 1.2.3]{SchapireFreund2012} wird das Phänomen des Overfitting für AdaBoost gezeigt. Trotz dieses theoretischen Hintergrunds war es mir in meinen praktischen Experimenten mit der SKLearn-Bibliothek in Python nicht möglich, Overfitting bei AdaBoost zu reproduzieren. Meine unzähligen Versuche mit unterschiedlichsten Anpassungen führten nicht zu den erwarteten Ergebnissen. Dies führt zu der Frage, warum AdaBoost in meinen Experimenten anscheinend resistent gegen Overfitting war. Der folgende Teil ist meine Theorie zu diesem Phänomen und entspricht nicht zwangsweise dem tatsächlichen Grund. Die Visualisierung, sowie die verwendeten Daten ist ein eigenes Beispiel und wurde mithilfe von SKLearn in python erstellt. Die genaue Implementierung ist auf meinem \textbf{\href{https://github.com/CodeLtDave/Boosting-Algorithms-ML-Seminararbeit/blob/main/python-env/ToleranceOverfittingAdaBoost.ipynb}{GitHub}} zu finden.
 
-\subsection{Wahl des Datensatzes} 
+\subsection{Wahl des Datensatzes}
+
 Ich habe mich für einen der vielen Varianten an Datensätzen entschieden um Overfitting möglichst zu provozieren:
 
 \begin{lstlisting}
@@ -73,12 +74,12 @@ Eine Grundeigenschaft von AdaBoost ist, dass die Gewichtung \(\alpha\) jedes Ler
 Die Margins Theorie im Kontext von AdaBoost bietet eine mögliche Erklärung. Diese Theorie konzentriert sich auf den Abstand der Datenpunkte zur Entscheidungsgrenze des Klassifizierers, also den Margin. Die Entscheidungsgrenzen sind in \autoref{fig:adaboost_decision_boundries} dargestellt. Ein größerer Margin impliziert eine höhere Zuversicht in die Klassifizierung. Gegensätzlich dazu ist ein geringer Margin, also eine kleine Distanz zur Entscheidungsgrenze ein Zeichen für eine geringe Zuversicht in die Klassifizierung.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{Images/AdaBoost_Decision_Boundaries.png}
+    \includegraphics[width=\textwidth]{Images/AdaBoost_Multiple_Decision_Boundaries.png}
     \caption{Entscheidungsgrenzen des Modells}
     \label{fig:adaboost_decision_boundries}
 \end{figure}
 \paragraph{Einfluss auf die Entscheidungsgrenzen}
-In \autoref{fig:adaboost_decision_boundries} sind die Entscheidungsgrenzen des AdaBoost-Modells dargestellt. Es ist erkennbar, dass die Grenzen mit zunehmenden Iterationen präziser werden. Dies bedeutet jedoch nicht automatisch eine steigende Komplexität des Modells. Insbesondere bis zur 250. Iteration konzentriert sich AdaBoost darauf, die Margins zu vergrößern, was bedeutet, dass es die Entscheidungsgrenze so anpasst, dass die Klassifizierungen sicherer werden. Also sich möglichst nicht direkt an den Datenpunkten liegen, was um es noch einmal zu wiederholen eine höhere Zuversicht auf die Richtigkeit der Vorhersage widerspiegelt.
+In \autoref{fig:adaboost_decision_boundries} sind die Entscheidungsgrenzen des AdaBoost-Modells dargestellt. Es ist erkennbar, dass die Grenzen mit zunehmenden Iterationen präziser werden. Dies bedeutet jedoch nicht automatisch eine steigende Komplexität des Modells. Insbesondere bis zur 250. Iteration konzentriert sich AdaBoost darauf, die Margins zu vergrößern, was bedeutet, dass es die Entscheidungsgrenze so anpasst, dass die Klassifizierungen sicherer werden. Also sich möglichst nicht direkt an den Datenpunkten liegen, was wie wir wissen, eine höhere Zuversicht auf die Richtigkeit der Vorhersage widerspiegelt.
 
 \paragraph{Vermeidung von Overfitting}
 Die Vergrößerung der Margins trägt also dazu bei, dass das Modell nicht übermäßig an die Trainingsdaten anzupassen. Durch die Fokussierung auf schwierigere Fälle und die Erhöhung der Margins für diese Datenpunkte kann AdaBoost Overfitting vermeiden. 
@@ -86,7 +87,5 @@ Die Vergrößerung der Margins trägt also dazu bei, dass das Modell nicht über
 \paragraph{Zusammenfassung}
 Die Margins Theorie ist also eine plausible Erklärung dafür, wie AdaBoost die Balance zwischen hoher Trainingsgenauigkeit und der Vermeidung von Overfitting hält. Die Fähigkeit des Modells, die Margins effektiv zu vergrößern und dabei die Entscheidungsgrenzen anzupassen, ohne dabei die Generalsierung zu verringern. \textbf{Diese Zuverlässigkeit gegen Overfitting macht Boosting Algorithmen so essentiell und populär.}
 
-!!! VERWEISEN
-
-\subsection{Exponentieller Abstieg des Trainingfehlers}
-!!! VERWEISEN
+% \subsection{Exponentieller Abstieg des Trainingfehlers}
+% !!! VERWEISEN
