@@ -1,3 +1,17 @@
-\section {Vergleich mit anderen ML-Modellen}
-Im vorletzten Kapitel, möchte ich die vorgestellten Boosting Algorithmen AdaBoost und GBT mit anderen bekannten Vertretern von ML-Modellen vergleichen. Einen besonderen Stellenwert, sollte dem XGBoost Algorithmus zugeschrieben werden, welcher auf dem GBT aufbaut. Durch Anpassungen soll er in den Punkten für Overfitting, Skalierbarkeit, Anpassbarkeit und Performance überlegen sein.
+\section {Vergleich von AdaBoost und GBT mit anderen Modellen}
+In diesem Kapitel werden die zwei vorgestellten Boosting Algorithmen AdaBoost und GBT mit anderen bekannten Vertretern von ML-Modellen verglichen werden. Die Ergebnisse und Grafiken basieren auf einer Studie von Randal \textcite{Olson2018}, welche 13 unterschiedliche Algorithmen auf 165 Datensätzen evaluiert. Das Ziel dieses Kapitels ist nicht nur eine einfache Leistungsanalyse, sondern soll aufzeigen welche Algorithmen und Parameter für welche Probleme zuerst in Betracht gezogen werden sollten.
+
+\subsection{Auswahl und Leistung der Algorithmen}
+Die von \textcite{Olson2018} untersuchten Algorithmen sind eine Reihe von Klassifikationsmethoden, wie unter anderem Naive Bayes Varianten, logistische Regression, Support Vector Machines. Darüberhinaus werden auch baumbasierte Algorithmen wie Random Forests und Extra Trees analysiert. Insbesondere baumbasierte Ensemble-Modelle, allen voran Gradient Boosting Trees, konnten hervoragende Leistungen über die varifizierte Auswahl an Datensätzen erbringen.
+
+\subsection{Ergebnisse der Studie}
+Gradient Boosting, insbesondere in der Variante Gradient Tree Boosting (GTB), schnitt in der Studie besonders gut ab. Es wurde festgestellt, dass GTB im Vergleich zu den anderen analysierten Algorithmen in vielen Fällen die beste Leistung erbrachte. Die Studie unterstreicht somit die Wirksamkeit von GBT, insbesondere im Hinblick auf dessen Fähigkeit, komplexe, nicht-lineare Muster in Daten effektiv zu modellieren.
+
+\subsection{Bedeutung für AdaBoost und GBT}
+Die Ergebnisse dieser Studie sind besonders relevant für die Bewertung von AdaBoost und GBT. Während AdaBoost in einigen Fällen gut abschneidet, zeigt die Studie, dass GBT aufgrund seiner Flexibilität und Robustheit in der Regel überlegene Leistungen erbringt. Dies bestätigt die in früheren Kapiteln diskutierten theoretischen Überlegungen zur Effektivität von GBT, insbesondere in Szenarien mit komplexen Datenstrukturen.
+
+\subsection{Empfehlungen für die Praxis}
+Basierend auf den Erkenntnissen der Studie können wir folgende Empfehlungen aussprechen: Für neue Projekte, insbesondere im Bereich der Bioinformatik, sollte zunächst Gradient Boosting in Betracht gezogen werden. Es ist jedoch kritisch, eine Vielzahl von Algorithmen und Konfigurationen zu testen, da es keinen universellen "besten" Algorithmus gibt. Die Auswahl des richtigen Algorithmus und die Feinabstimmung seiner Parameter können zu signifikanten Verbesserungen der Vorhersagegenauigkeit führen.
+
+Insgesamt unterstreichen die Ergebnisse der Studie die Bedeutung von Ensemble-Methoden und insbesondere von Gradient Boosting als leistungsstarke Werkzeuge im Arsenal des maschinellen Lernens.
 
