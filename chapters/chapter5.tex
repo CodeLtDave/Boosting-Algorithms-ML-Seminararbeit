@@ -10,7 +10,7 @@ Obwohl GBT sowohl für Klassifikations- als auch für Regressionsprobleme einset
 \subsection{Die Loss-Funktion \( L \)}
 \label{sec:loss_funtion}
 Ein wesentlicher Bestandteil des Gradient Boosting Trees Algorithmus ist die Loss-Funktion \( L(y_i,F(x)) \), welche zur Bewertung der Genauigkeit des Modells genutzt wird. Einen zentralen Teil dabei spielen die Residuen. Ein Residuum ist umgangssprachlich ein Fehler, also die Differenz zwischen einem tatsächlichen Datenpunkt \( y_i \) und dem dazu aus dem Modell vorhergesagten Wert \( F(x_i) \).
-Im Rahmen von GBT wird häufig der Begriff "Pseudo-Residuen" verwendet. Diese werden in jeder Iteration \( m \) des Algorithmus berechnet und sind definiert als der negative Gradient der Loss-Funktion bezüglich der Modellvorhersage:
+Im Rahmen von GBT wird häufig der Begriff `Pseudo-Residuen' verwendet. Diese werden in jeder Iteration \( m \) des Algorithmus berechnet und sind definiert als der negative Gradient der Loss-Funktion bezüglich der Modellvorhersage:
 
 \begin{equation}
     \label{eq:residuum_general}
