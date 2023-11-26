@@ -16,7 +16,8 @@ Im Rahmen von GBT wird häufig der Begriff `Pseudo-Residuen' verwendet. Diese we
     \label{eq:residuum_general}
     r_{i,m} = -\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\bigg|{F(x)=F{m-1}(x)}
 \end{equation}
-Im Gegensatz zu einfachen Residuen, welche den Fehler zwischen Vorhersage und tatsächlichem Wert angeben, gibt ein Pseudo-Residuum sowohl die Richtung als auch das Ausmaß der erforderlichen Anpassungen des Modells an. Bei GBT ist das besonders wichtig, da der in jeder Iteration hinzugefügte Entscheidungsbaum speziell darauf trainiert wird, diese Pseudo-Residuen zu minimieren.
+Im Gegensatz zu einfachen Residuen, welche den Fehler zwischen Vorhersage und tatsächlichem Wert angeben, gibt ein Pseudo-Residuum an, wie das Modell zur Minimierung des Fehlers des Vorgängers angepasst werden muss, also sowohl die Richtung als auch Betrag der Anpassungen. Denn bei GBT wird der in jeder Iteration hinzugefügte Entscheidungsbaum speziell darauf trainiert, diese Pseudo-Residuen zu minimieren.
+Im einfachstem Beispiel, wie unten, wenn die Loss-Funktion die Summe der quadratischen Fehler mit Faktor 0.5 ist, entsprechen die Pseudo-Residuen den Residuen mit negativem Vorzeichen, es wird also genau das Residuum abgezogen.
 
 \subsubsection{Der Mittlere Quadratische Fehler (MSE)}
 Eine häufig genutze Loss-Funktion bei GBT ist der mittlere quadratische Fehler (Mean squared error, MSE). Gerade für Regressionsprobleme eignet sich die Loss-Funktion MSE besonders und ist  definiert als:
