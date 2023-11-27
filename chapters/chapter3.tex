@@ -8,16 +8,16 @@ Doch im Bereich des maschinellen Lernens offenbart sich ein ganz anderes Szenari
 
 \subsection{Was ist Boosting}
 \begin{mdframed}
-    \textbf{Boosting (ursprünglich Hypothesis Boosting)} bezeichnet eine beliebige Ensemble-Methode des Supervised Learning, bei der sich mehrere schwache Lerner durch Hintereinanderausführung (iterativ) zu einem starken Lerner kombinieren lassen. \textcite[S.~191]{Geron2018}. Das Boosting findet statt, indem die Fehler des Vorgängers stark höher gewichtet werden für die folgende Lerniteration als richtig erkannte Zuordnungen. So beschäftigt sich jede Lerninstanz primär mit der Ausmerzung der Fehler des Vorgängers.
-    
-Es gibt eine entfernte Verwandtschaft des Boostings zu der "Attention" in modernen Transformer-Architekturen wie GPT. Der meist verwendete Gradientenabstieg zur Fehlerminimierung in Boosting-Verfahren ähnelt wiederum den auch in Neuronalen Netzen verwendeten Gradientenabstiegsverfahren wie z.B. Backpropagation. Ein Unterschied sind jedoch meist wesentlich geringer benötigte Ressourcen und Lernzeiten als bei Deep Learning Modellen, wo sehr hohe Zahlen von Parametern nötig sind.
+    \textbf{Boosting (ursprünglich Hypothesis Boosting)} bezeichnet eine beliebige Ensemble-Methode des Supervised Learning, bei der sich mehrere schwache Lerner durch Hintereinanderausführung (iterativ) zu einem starken Lerner kombinieren lassen. \textcite[S.~191]{Geron2018}.
+\end{mdframed}   
 
-Zu einem bekannten anderen Verfahren des Ensemble Learning, den Random Forests besteht ein grundsätzlicher Unterschied: Random Forests sind **parallele** Lerninstanzen, deren Ergebnisse kombiniert werden, z.B. durch Mehrheitsentscheide, wohingegen Boosting Verfahren prinzipiell **sequentiell** ausgeführt werden, weil ja auf den Fehler des Vorgängers abgestellt wird. Andere Parallelisierungen sind natürlich möglich.\textcite[S.343]{Frochte202} Insbesondere können natürlich auch beim Boosting mehrere Klassifikatoren parallel betrachtet und kombiniert werden.
+\subsubsection{Abgrenzung zu anderen ML-Modellen}
+Es gibt eine entfernte Verwandtschaft des Boostings zu der `Attention' in modernen Transformer-Architekturen wie GPT. Der meist verwendete Gradientenabstieg zur Fehlerminimierung in Boosting-Verfahren ähnelt wiederum den auch in Neuronalen Netzen verwendeten Gradientenabstiegsverfahren wie z.B. Backpropagation. Ein Unterschied sind jedoch meist wesentlich geringer benötigte Ressourcen und Lernzeiten als bei Deep Learning Modellen, wo sehr hohe Zahlen von Parametern nötig sind.
+\newline
+Zu einem bekannten anderen Verfahren des Ensemble Learning, den Random Forests besteht ein grundsätzlicher Unterschied: Random Forests sind \textbf{parallele} Lerninstanzen, deren Ergebnisse kombiniert werden, z.B. durch Mehrheitsentscheide, wohingegen Boosting Verfahren prinzipiell \textbf{sequentiell} ausgeführt werden, weil ja auf den Fehler des Vorgängers abgestellt wird. Andere Parallelisierungen sind natürlich möglich (\cite[S.343]{Frochte2020}).
 
 \subsection{Beispiel Wettererkennung}
-\end{mdframed}
-
-Die genannte Definition des Boosting lässt sich gut anhand des Beispiels der Wettererkennung veranschaulichen. Betrachten wir folgende einfache Regeln (Schwache Lerner) zur Beurteilung, ob es regnet:
+Das Prinzip der Kombination der schwacher Lerner lässt sich gut anhand des Beispiels der Wettererkennung veranschaulichen. Betrachten wir folgende einfache Regeln (Schwache Lerner) zur Beurteilung, ob es regnet:
 
 \begin{table}[h]
     \centering
@@ -60,16 +60,16 @@ Der nächste Schritt ist es, die Aussagen der schwachen Lerner in ein nützliche
 \end{table}
 
 \subsection{Gewichtete Abstimmung}
-Aus der Mehrheitsentscheidung, bei der alle schwachen Lerner die gleiche Stimmkraft haben, eine Vorhersage zu treffen, liefert nur selten die besten Ergebnisse. Eine bessere Vorgehensweise, die auch von vielen Boosting-Algorithmen benutzt wird, ist die gewichtete Abstimmung. Diese Methode berechnet die Stimmkraft oder Gewichtung des Lerners \( \alpha \) individuell, wie im Algorithmus 1.1 von Schapire und Freund beschrieben \parencite[S.~5]{SchapireFreund2012}.
+Aus der Mehrheitsentscheidung, bei der alle schwachen Lerner die gleiche Stimmkraft haben, eine Vorhersage zu treffen, liefert nur selten die besten Ergebnisse. Eine bessere Vorgehensweise, die auch von vielen Boosting-Algorithmen benutzt wird, ist die gewichtete Abstimmung. Diese Methode berechnet die Stimmkraft oder Gewichtung des Lerners \( \alpha \) individuell, wie im \autoref{algo:adaboost} von Schapire und Freund beschrieben \parencite[S.~5]{SchapireFreund2012}.
 
 \subsubsection{Grundlegende Annahmen}
 \begin{mdframed}
     \textbf{Gegeben:} \\
-    - Ein Datensatz \( X \), bestehend aus \( n \) Beispielpaaren, wobei jedes Paar aus einem Eingabedatum \( x_i \) und dem entsprechenden Zielwert \( y_i \) besteht: \( X = \{(x_1, y_1), (x_2, y_2), \dots, (x_n, y_n)\} \). \\
+    - Ein Datensatz bestehend aus \( n \) Beispielpaaren, wobei jedes Paar aus einem Eingabedatum \( x_i \) und dem entsprechenden Zielwert \( y_i \) besteht: \( X = \{(x_1, y_1), (x_2, y_2), \dots, (x_n, y_n)\} \). \\
     - Schwache Lerner \( t \) mit Vorhersagefunktion/Hypthese \( h_t \).
 \end{mdframed}
 
-Jeder schwache Lerner trifft Vorhersagen basierend auf dem Datensatz \( X \). Der Erfolg dieser Vorhersagen wird durch den Fehler \( \varepsilon_t \) gemessen.
+Jeder schwache Lerner trifft Vorhersagen basierend auf dem Datensatz. Der Erfolg dieser Vorhersagen wird durch den Fehler \( \varepsilon_t \) gemessen.
 
 \subsubsection{Fehlerberechnung}\label{sec:errorComputation}
 Der Fehler \( \varepsilon_t \) eines schwachen Lerners ist der Anteil der falschen Vorhersagen:
