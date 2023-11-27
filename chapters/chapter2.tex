@@ -1,8 +1,8 @@
 \section{Grundlagen des Machine Learning}
 \subsection{Einordnung von Boosting im Kontext des maschinellen Lernens}
-Boosting lässt sich dem überwachten Lernen (supervised Learning) zuordnen. Diese Hauptkategorie des maschinellen Lernens beschäftigt sich mit Modellen, die auf Datensätzen mit Ein- und Ausgabe-Paaren trainiert werden. Durch Training versucht das Modell anhand der Eingabe Werte die Ausgabe Werte zu schätzen und wird je der Abweichung zur tatsächlichen Ausgabe angepasst. Das Ziel ist es das Modell zu nutzen um Aussagen auf bisher unbekannten Daten zu treffen.
+Boosting lässt sich dem überwachten Lernen (supervised Learning) zuordnen. Diese Hauptkategorie des maschinellen Lernens beschäftigt sich mit Modellen, die auf Datensätzen mit Ein- und Ausgabe-Paaren trainiert werden. Durch Training versucht das Modell anhand der Eingabe Werte die Ausgabe Werte zu schätzen und wird je nach der Abweichung zur tatsächlichen Ausgabe angepasst. Das Ziel ist es das Modell zu nutzen um Aussagen auf bisher unbekannten Daten zu treffen.
 \newline
-Ein Teilgebiet davon ist das Ensemble-Lernen, eine Strategie die mehrere Modelle kombiniert, um eine bessere Lösung zu finden als die eines Einzelmodells. Boosting ist neben Bagging eine bekannte Methode in diesem Bereich. Während Boosting meist durch iteratives trainieren versucht das Gesamtmodell zu verbessern, ist Bagging ein paralleler Prozess, der Versucht vor allem die Varianz zu reduzieren.
+Ein Teilgebiet davon ist das Ensemble-Lernen, eine Strategie die mehrere Modelle kombiniert, um eine bessere Lösung zu finden als die eines Einzelmodells. Boosting ist neben Bagging eine bekannte Methode in diesem Bereich. Während Boosting meist durch iteratives Trainieren versucht das Gesamtmodell zu verbessern, ist Bagging ein paralleler Prozess, der versucht vor allem die Varianz zu reduzieren.
 
 \subsection{Wichtige Terminologien}
 Um die Seminararbeit in Gänze zu verstehen erfordert es in meinen Augen eine kurze Klarstellung der wichtigsten Begrifflichkeiten. Das restliche Kapitel soll diese Begriffe im Kontext des maschinellen Lernens erklären:
@@ -11,7 +11,7 @@ Um die Seminararbeit in Gänze zu verstehen erfordert es in meinen Augen eine ku
 Ein \textbf{Modell} ist das Produkt eines Lernprozesses und wird verwendet, um Aussagen auf neuen Daten zu treffen.
 
 \subsubsection{Problem und Aufgabe}
-Jede KI ist für einen bestimmten Zweck vorgesehen. Ein \textbf{Problem} ist dabei die spezifische Herausforderung, welche durch den Einsatz von Machine Learning Algorithmen gelöst werden soll. Ein Beispiel für ein solches Problem ist  die Bilderkennung. Eine \textbf{Aufgabe} ist hingegen etwas konkreter und beschreibt die genaue Aktion, die ein ML-Modell ausführen soll. Für das Problem Bilderkennung wäre eine Aufgabe für ein ML-Modell beispielsweise die Klassifikation von Bildern. Grundsätzlich ist die relevante Bedeutung der Begriffe Problem, Aufgabe, Herausforderung und Anwendung ähnlich.
+Jede KI ist für einen bestimmten Zweck vorgesehen. Ein \textbf{Problem} ist dabei die spezifische Herausforderung, welche durch den Einsatz von Machine Learning Algorithmen gelöst werden soll. Ein Beispiel für ein solches Problem ist  die Bilderkennung. Eine \textbf{Aufgabe} ist hingegen etwas konkreter und beschreibt die genaue Aktion, die ein ML-Modell ausführen soll. Ein Beispiel für eine Aufgabe beim Problem der Bilderkennung ist die Klassifikation von Bildern durch ein ML-Modell. Grundsätzlich ist die relevante Bedeutung der Begriffe Problem, Aufgabe, Herausforderung und Anwendung ähnlich.
 
 \subsubsection{Daten, Datensätze und Datenpunkte}
 \textbf{Daten} sind eine essentielle Grundlage für maschinelles Lernen. Zusammenhängende Daten werden \textbf{Datensatz} genannt, wie beispielsweise eine Tabelle. Ein Datensatz besteht dabei immer aus einer Menge von \textbf{Datenpunkten}, wobei jeder Datenpunkt eine zusammengehörende Instanz oder ein Beispiel ist. In einer Tabelle wird ein Datensatz durch eine Zeile repräsentiert. Diese Zeile hat für jede Spalte (Merkmal, Attribut, feature) einen Datenwert.
@@ -21,7 +21,7 @@ Es ist üblich die Daten in \textbf{Trainingsdaten} und Testdaten zu teilen. Tra
 \newline
 Gerade im Bereich des maschinellen Lernens bestehen die Daten oft aus Ein- und Ausgabe-Paaren. Das Modell versucht anhand der Eingabe die Ausgabe zu schätzten. Im Trainingsprozess wird die Ausgabe des Modells dann mit den tatsächlichen \textbf{Zieldaten} verglichen und je nach Fehler angepasst.
 
-\subsection{Lerner}
+\subsubsection{Lerner}
 Der \textbf{Lerner} ist die Instanz eines angewendeten Lernalgorithmus, der verwendet wird um durch Training auf den Daten ein Modell zu erstellen. Ist die durch den Lernalgorithmus erzeugte Hypothese sehr einfach gehalten, was in der Regel wenig rechenaufwendig ist und nur geringfügig bessere Ergebnisse erzielt als zufällgies Raten, spricht man von einem \textbf{schwachen Lerner}.
 
 \subsubsection{Hypothese und Vorhersage}
