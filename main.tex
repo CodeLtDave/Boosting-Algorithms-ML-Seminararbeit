@@ -18,6 +18,20 @@
 \usepackage{hyperref}
 \usepackage{setspace}
 \usepackage{microtype}
+\usepackage{glossaries}
+\usepackage{mdframed}
+\usepackage{pgfplots}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[normalem]{ulem}
+\usepackage{wrapfig}
+\usepackage{listings}
+\usepackage{xcolor}
+
+
 
 %%| SET PACKAGE PARAMETERS HERE |%%
 \hypersetup{                                                                        
@@ -26,17 +40,33 @@
     filecolor   = black,
     linkcolor   = black,
     urlcolor    = black,
-    pdftitle    = {Labor ABCDEFGHIJ},                                               % SET FILE PARAMETERS HERE (SHOWN IN PDF PROPERTIES)
-    pdfsubject  = {Einführung in ABCDEFGHIJ},                                       % ...
-    pdfauthor   = {Max Mustermann},                                                 % ...
-    pdfkeywords = {XY-Labor, Laborbericht ...} ,                                    % ...
+    pdftitle    = {Machine Learning: Boosting-Algorithmen},                         
+    pdfsubject  = {Seminararbeit},                                                  
+    pdfauthor   = {David Erdös},                                                  
+    pdfkeywords = {Machine Learning, Boosting, AdaBoost, Gradient Boosting} ,     
     pdfcreator  = {pdflatex},           
     pdfproducer = {LaTeX with hyperref}
 }
-\setstretch{1.25}                                                                   % SET GENERAL LINE SPACING HERE
+\setstretch{1.25}                                                                  
 
 %%| SET OTHER PARAMETERS HERE |%%
 \addbibresource{Document/Bibliography/ref.bib}
+\makeglossaries
+\pgfplotsset{compat=1.17}
+\renewcommand{\listalgorithmname}{Algorithmenverzeichnis}
+% Definiere den Namen für \autoref für Algorithmen
+\providecommand*{\algorithmname}{Algorithmus}
+\providecommand*{\algorithmautorefname}{Algorithmus}
+\useunder{\uline}{\ul}{}
+\lstset{language=Python, 
+        basicstyle=\ttfamily\small, 
+        keywordstyle=\color{blue},
+        commentstyle=\color{gray},
+        stringstyle=\color{red},
+        showstringspaces=false,
+        breaklines=true}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%| TITLE PAGE |%%
@@ -44,40 +74,62 @@
 \begin{titlepage}
     \begin{center}
         \includegraphics[width=0.55\textwidth]{Images/Template/HsKa_new.png}\\[16ex]
-        \huge{\textbf{-Labor ABCDEFGHIJ-}\\Laborbericht}\\[8ex]
-        \large{\textbf{Laborversuch 1}}\\[1ex]
-        \LARGE{\textbf{Einführung in ABCDEFGHIJ}}\\[14ex]
+        \huge{\textbf{-Machine Learning: Boosting-Algorithmen-}\\Seminararbeit}\\[8ex]
         \normalsize{}
         \begin{tabular}{lll}
-            Student:            & \quad Max Mustermann                                  & 12345 \\[2ex]     % NUMBER IS MAT.NR
+            Student:            & \quad David Erdös                               & 67906 \\[2ex]
             Universität:        & \quad Hochschule Karlsruhe – Technik und Wirtschaft   &       \\[2ex]
-            Studiengang:        & \quad Elektro- und Informationstechnik                &       \\[2ex]
-            Studienvertiefung:  & \quad Automatisierungstechnik                         &       \\[2ex]
-            Semester:           & \quad Sommersemester 2021                             &       \\[2ex]
-            Dozent:             & \quad Prof. Dr.-Ing. Hans Maier                       &       \\[2ex]
-            Bearbeitet am:      & \quad 16. April 2021                                  &       \\[2ex]
+            Studiengang:        & \quad Informatik Bachelor             &       \\[2ex]
+            Semester:           & \quad Wintersemester 2023                             &       \\[2ex]
+            Dozent:             & \quad Prof. Dr. Baier                       &       \\[2ex]
+            Bearbeitet am:      & \quad 26. November 2023                             &       \\[2ex]
         \end{tabular}
     \end{center}
 \end{titlepage}
 \newpage
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%| TABLE OF CONTENTS |%%
 \pagenumbering{gobble}    
 \tableofcontents
 \newpage
 \pagenumbering{arabic}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%| WRITE TEXT HERE |%%
-PLACEHOLDER WITH EXAMPLE FOR IEEE CITATION \cite{einstein}
+%%| MAIN CONTENT |%%
+\include{chapters/chapter1}
+\include{chapters/chapter2}
+\include{chapters/chapter3}
+\include{chapters/chapter4}
+\include{chapters/chapter5}
+\include{chapters/chapter6}
+\include{chapters/chapter7}
+\include{chapters/chapter8}
+\include{chapters/chapter9}
+
+%%| GLOSSARY IMPORT |%%
+\input{glossary.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| GLOSSARY |%%   
+% \newpage    
+% \printglossaries{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%| BIBLIOGRAPHY |%%                 
-\newpage                                          
-\printbibliography[heading= bibintoc, title={Literaturverzeichnis}]
+\newpage                     
+\nocite{*}
+\printbibliography[heading=bibintoc, title={Literaturverzeichnis und Quellen}]
+
+%%| FIGURES AND TABLES LISTS |%%
 \newpage
 \listoffigures
 \addcontentsline{toc}{section}{Abbildungsverzeichnis}
 \newpage
 \listoftables
 \addcontentsline{toc}{section}{Tabellenverzeichnis}
+\newpage
+\listofalgorithms
+\addcontentsline{toc}{section}{Algorithmenverzeichnis}
+
 \end{document}

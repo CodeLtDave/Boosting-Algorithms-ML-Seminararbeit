@@ -1,0 +1,106 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| !!! TEMPLATE INSPIRED BY https://github.com/ocjojo/hska-latex-template                  !!! |%%
+%%| !!! HsKa_old.jpg CAN BE FOUND HERE: https://de.wikipedia.org/wiki/Datei:Hska_logo.svg   !!! |%%
+%%| !!! HsKa_new.png WAS CREATED BY USAGE OF IMAGERY FROM: https://www.h-ka.de/intern       !!! |%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| SET DOCUMENT PARAMTER HERE |%%
+\documentclass[11pt]{article}
+
+%%| INCLUDE PACKAGES HERE |%%
+\usepackage[utf8]{inputenc}
+\usepackage[paper=a4paper,left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
+\usepackage[english, ngerman]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[autostyle=true,german=quotes]{csquotes}
+\usepackage[backend=biber, style=ieee]{biblatex}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{microtype}
+\usepackage{glossaries}
+\usepackage{mdframed}
+\usepackage{pgfplots}
+
+
+%%| SET PACKAGE PARAMETERS HERE |%%
+\hypersetup{                                                                        
+    colorlinks,
+    citecolor   = black,
+    filecolor   = black,
+    linkcolor   = black,
+    urlcolor    = black,
+    pdftitle    = {Machine Learning: Boosting-Algorithmen},                         
+    pdfsubject  = {Seminararbeit},                                                  
+    pdfauthor   = {David Erdös},                                                  
+    pdfkeywords = {Machine Learning, Boosting, AdaBoost, Gradient Boosting} ,     
+    pdfcreator  = {pdflatex},           
+    pdfproducer = {LaTeX with hyperref}
+}
+\setstretch{1.25}                                                                  
+
+%%| SET OTHER PARAMETERS HERE |%%
+\addbibresource{Document/Bibliography/ref.bib}
+\makeglossaries
+\pgfplotsset{compat=1.17}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| TITLE PAGE |%%
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+        \includegraphics[width=0.55\textwidth]{Images/Template/HsKa_new.png}\\[16ex]
+        \huge{\textbf{-Machine Learning: Boosting-Algorithmen-}\\Seminararbeit}\\[8ex]
+        \normalsize{}
+        \begin{tabular}{lll}
+            Student:            & \quad David Erdös                               & 67906 \\[2ex]
+            Universität:        & \quad Hochschule Karlsruhe – Technik und Wirtschaft   &       \\[2ex]
+            Studiengang:        & \quad Informatik Bachelor             &       \\[2ex]
+            Semester:           & \quad Wintersemester 2023                             &       \\[2ex]
+            Dozent:             & \quad Prof. Dr. Baier                       &       \\[2ex]
+            Bearbeitet am:      & \quad 1. Dezember 2023                             &       \\[2ex]
+        \end{tabular}
+    \end{center}
+\end{titlepage}
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| TABLE OF CONTENTS |%%
+\pagenumbering{gobble}    
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| MAIN CONTENT |%%
+\include{chapters/chapter1}
+\include{chapters/chapter2}
+\include{chapters/chapter3}
+\include{chapters/chapter4}
+\include{chapters/chapter5}
+\include{chapters/chapter6}
+\include{chapters/chapter7}
+\include{chapters/chapter8}
+
+%%| GLOSSARY IMPORT |%%
+\input{glossary.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| GLOSSARY |%%   
+\newpage    
+\printglossaries{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%| BIBLIOGRAPHY |%%                 
+\newpage                                          
+\printbibliography[heading=bibintoc, title={Literaturverzeichnis}]
+
+%%| FIGURES AND TABLES LISTS |%%
+\newpage
+\listoffigures
+\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+\newpage
+\listoftables
+\addcontentsline{toc}{section}{Tabellenverzeichnis}
+
+\end{document}

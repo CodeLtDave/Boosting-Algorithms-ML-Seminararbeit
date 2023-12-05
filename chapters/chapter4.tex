@@ -1,0 +1,116 @@
+\section{AdaBoost}
+\subsection{Adaptives Lernen}
+\label{sec:adaptive_learning}
+Ein Großteil der Boosting-Algorithmen benutzt das Prinzip des sequenziellen adaptiven Lernens. Das heißt, dass man die Lerner sequentiell, also nacheinander, so trainiert, dass jeder Lerner versucht adaptiv die Fehler des vorherigen Lerners auszubessern.
+\newline
+Der Vertreter dieser Methode ist der AdaBoost-Algorithmus, dessen Name sich von 'Adaptive Boosting' ableitet.
+\subsubsection{Gewichtete Daten}
+Um einen Lerner in einem Boosting-Algorithmus zu entwickeln, wird der Lernalgorithmus zunächst auf dem ursprünglichen Datensatz angewendet. Nach dieser ersten Runde bewertet der Algorithmus die Klassifikationsergebnisse, um festzustellen, welche Datenpunkte richtig und welche falsch klassifiziert wurden. Die falsch klassifizierten Datenpunkte erhalten dann ein höheres Gewicht, was ihre Bedeutung im Datensatz für den nächsten Schritt erhöht. Im Gegenzug werden die Gewichte der korrekt klassifizierten Datenpunkte verringert.
+\newline
+In der darauffolgenden Iteration wird der Lernalgorithmus erneut angewendet, diesmal aber auf den Datensatz, dessen Gewichte gerade angepasst wurden. Dadurch wird der Lernalgorithmus versuchen sich besonders auf die vom ersten Lerner falsch klassifizierten Daten zu konzentrieren. Nach dem Training des zweiten Lerners erfolgt eine weitere Anpassung der Gewichte nach den gleichen Regeln.
+\newline
+Dieser Prozess wird fortgesetzt, wobei jeder nachfolgende Lerner darauf abzielt, die Fehler seiner Vorgänger zu korrigieren (siehe \autoref{fig:Geron2017Abb7-7}).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{Images/Geron2017Abb7-7.png}
+    \caption[Sequentielles Training mit aktualisierten Gewichten der Datenpunkte bei AdaBoost]{Sequentielles Training mit aktualisierten Gewichten der Datenpunkte bei AdaBoost (Quelle: \textcite[Abbildung 7-7][S.~192]{Geron2018})}
+    \label{fig:Geron2017Abb7-7}
+\end{figure}
+
+\subsection{Algorithmus-Struktur und Funktionsweise}
+Der AdaBoost-Algorithmus (siehe Algorithmus~\ref{algo:adaboost}) ist in mehrere Schritte unterteilt, welche im folgenden genau erklärt werden:
+
+\paragraph{Schritt 1: Initialisierung (Zeile 2)}\label{para:Initialisierung}
+\label{para:ada_algo_s1}
+Hier werden die Gewichte \( D_1(i) \) initial gleich verteilt. Das heißt, dass jeder Datenpunkt am Anfang das gleiche Gewicht hat, also gleich wichtig ist.
+
+\paragraph{Schritt 2: Iterationen (Zeile 3 bis 13)}
+\label{para:ada_algo_s2}
+Der Algorithmus durchläuft \( T \) Iterationen, in denen pro Durchlauf ein neuer schwacher Lerner trainiert und bewertet wird.
+
+\paragraph{Schritt 2.1: Training der schwachen Lerner (Zeile 4-5)}
+\label{para:ada_algo_s2.1}
+In jeder Iteration \( t \) wird ein schwacher Lerner \( h_t \) unter der aktuellen Gewichtungsverteilung \( D_t \) der Daten trainiert. Dieser Lerner erzeugt eine Hypothese zur Klassifizierung der Daten.
+
+\paragraph{Schritt 2.2: Fehlerberechnung (Zeile 6)}
+\label{para:ada_algo_s2.2}
+Der Fehler \( \varepsilon_t \) des Lerners wird berechnet als Anteil der falsch klassifizierten Beispiele, gewichtet nach \( D_t \). Weitere Details zur Fehlerberechnung sind in \autoref{sec:errorComputation} erläutert.
+
+\paragraph{Schritt 2.3: Gewichtung der Lerner (Zeile 7)}
+\label{para:ada_algo_s2.3}
+Die Gewichtung \( \alpha_t \) jedes schwachen Lerners basiert auf seinem Fehler \( \varepsilon_t \) und wird mithilfe der Formel \( \alpha_t = \frac{1}{2} \ln\left(\frac{1 - \varepsilon_t}{\varepsilon_t}\right) \) berechnet. Diese Gewichtung bestimmt den Einfluss jedes Lerners auf das Endergebnis. Genaueres dazu ist im \autoref{sec:weightedLearners} zu finden.
+
+\paragraph{Schritt 2.4: Aktualisierung der Gewichte (Zeile 8-12)}
+\label{para:ada_algo_s2.4}
+Die Gewichte der Datenpunkte \( D_t(i) \) werden für die nächste Iteration \( D_{t+1}(i) \) aktualisiert. Datenpunkte, die falsch klassifiziert wurden, erhalten ein höheres Gewicht, während korrekt klassifizierte Datenpunkte ein niedrigeres Gewicht bekommen. Die Aktualisierung erfolgt gemäß der Formel in Zeile 9. \( Z_t \) ist dabei ein Normalisierungsfaktor, der sicherstellt, dass \( D_{t+1} \) eine Wahrscheinlichkeitsverteilung bleibt.
+
+\paragraph{Schritt 3: Ausgabe der finalen Hypothese (Zeile 14)}
+\label{para:ada_algo_s3}
+Nach Abschluss aller Iterationen wird die finale Hypothese \( H(x) \) als gewichtete Summe der Hypothesen aller schwachen Lerner ausgegeben:
+\[
+H(x) = \text{sign}\left(\sum_{t=1}^{T} \alpha_t h_t(x)\right).
+\]
+Diese Vorhersagefunktion repräsentiert das Endergebnis des AdaBoost-Algorithmus.
+
+\begin{algorithm}[H]
+    \caption[AdaBoost Algorithmus]{AdaBoost Algorithmus (nach Schapire und Freund, Algorithmus 1.1, S. 5)}\label{algo:adaboost}
+    \begin{algorithmic}[1]
+    \State \textbf{Gegeben:} Trainingssatz \( (x_1,y_1), \dots, (x_m,y_m) \), wobei \( x_i \in X \), \( y_i \in \{-1, +1\} \)
+    \State \textbf{Initialisierung:} \( D_1(i) = \frac{1}{m} \) für \( i = 1, \dots, m \)
+    \For{\( t = 1, \dots, T \)}
+        \State Trainiere schwachen Lerner mit Verteilung \( D_t \)
+        \State Erhalte Hypothese \( h_t : X \rightarrow \{-1, +1\} \)
+        \State Berechne Fehler \( \varepsilon_t = \text{Pr}_{i \sim D_t} [h_t(x_i) \neq y_i] \)
+        \State Wähle \( \alpha_t = \frac{1}{2} \ln\left(\frac{1 - \varepsilon_t}{\varepsilon_t}\right) \)
+        \State Aktualisiere Gewichte: 
+        \For{\( i = 1, \dots, m \)}
+            \State \hfill \( D_{t+1}(i) = \frac{D_t(i) \cdot e^{-\alpha_t y_i h_t(x_i)}}{Z_t} \) \hfill\(\) % Zentrierte Formel
+        \EndFor
+        \State wobei \( Z_t \) ein Normalisierungsfaktor ist (gewählt so dass \( D_{t+1} \) eine Verteilung ist)
+    \EndFor
+    \State \textbf{Ausgabe:} \( H(x) = \text{sign}\left(\sum_{t=1}^{T} \alpha_t h_t(x)\right) \)
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Anwendungsbeispiel}
+\begin{wrapfigure}{r}[10pt]{0.6\textwidth} % 'r' für rechts, '0.5\textwidth' für die Breite
+    \centering
+    \includegraphics[width=0.5\textwidth]{Images/adaBoostSchemaatic.png}
+    \caption[Schematische Darstellung des AdaBoost-Prozesses]{Schematische Darstellung des AdaBoost-Prozesses (Quelle: ResearchGate, Alex Henderson et al.)}.
+    \label{fig:adaboost_schematic}
+  \end{wrapfigure}
+
+Um den doch eher abstrakten AdaBoost-\autoref{algo:adaboost} zu veranschaulichen, wird im folgenden die Funktionsweise anhand des Beispiels in \autoref{fig:adaboost_schematic} beschrieben. Die Werte der Berechnung sind in \autoref{tab:adaboost_schematic} zu finden. 
+\newline
+Im Trainingssatz gibt es 10 Datenpunkte \( i \), die entweder durch ein blaues Dreieck oder ein orangenes Viereck dargestellt sind. Wie gefordert, sind zu Beginn der 1. Iteration alle Datenpunkte  mit den gleichen Gewichten \( D_1 \) initialisiert, was  durch die gleiche Größe der geometrischen Formen veranschaulicht wird.
+\newline
+Unter der Annahme des schwachen Lernens aus \autoref{sec:assumptionOfWeakLearning} nehmen wir an, dass der genutzte schwache Lernalgorithmus die Fläche entweder horizontal, oder vertikal mit einer Linie teilt. Die Hypothese \( h_1 \) der 1. Iteration identifiziert 7 von 10 Datenpunkten richtig und hat somit eine Fehlerquote \( \epsilon_1 \) von 0.30. Tatsächlich gibt es keine Linie, die alle Formen richtig zuweisen kann, 7 von 10 ist also ein passables Ergebnis.
+\newline
+Die aus der Fehlerquote \( \epsilon_1 \) berechnete Gewichtung \( \alpha_1 \) beträgt 0.42. Es lässt sich erkennen, dass die falsch klassifizierten Dreiecke 2-4 eine Erhöhung ihrer Gewichte mit dem Faktor \( e^{-\alpha_1 y_i h_1(x_i)} \), der ungefähr 1.53 beträgt, erfahren, während die richtig klassifizierten Formen durch einen Faktor von etwa 0.65 eine Verringerung ihrer Gewichte erfahren.
+\newline
+Die aktualisierten Gewichte \( D_2(i) \) für die zweite Iteration ergeben sich als Produkt der vorherigen Gewichte \( D_1(i) \) und des Faktors \( e^{-\alpha_1 y_i h_1(x_i)} \). Diese neuen Gewichte werden dann durch den Normalisierungsfaktor \( Z_1 \approx 0.92 \) geteilt, um sicherzustellen, dass die Gesamtsumme aller \( D_t \) gleich 1 bleibt.
+\newline
+\newline
+Diese Abfolge an Schritten aus \autoref{algo:adaboost} wiederholt sich in jeder Iteration. In diesem Beispiel gibt es insgesamt drei Iterationen. Nach der 3. Iteration werden die Hyptohesen \( h \) mit ihrer Gewichtung \( \alpha \) in der finalen Hypthese \( H \) zusammengefasst.
+\newline
+Wie aus \autoref{fig:adaboost_schematic} hervorgeht, reichen drei Iterationen aus, um einen starken Lerner hervorzubringen, welches alle Datenpunkte \( i \) richtig klassifiziert. Es ist unerwartet, dass die Fehlerrate auf den Trainingsdaten so rapide abnimmt. Der exponentielle Abstieg der Fehlerquote ist tatsächlich typisch für AdaBoost. Dies ist eine der Eigenschaften die viele Boosting-Algorithmen so gebräuchlich machen. 
+
+\begin{table}[H]
+    \caption[Berechnungen für \autoref{fig:adaboost_schematic}]{Berechnungen für \autoref{fig:adaboost_schematic} gemäß \autoref{algo:adaboost} nach Vorlage von \textcite[Tabelle 1.1][S.~9]{SchapireFreund2012}}
+    \label{tab:adaboost_schematic}
+    \begin{tabular}{l|llllllllll|l}
+    \hline
+                                                  & 1    & 2          & 3          & 4          & 5          & 6          & 7          & 8          & 9          & 10   &                             \\ \hline
+    \( D_1(i) \)                                  & 0.10 & {\ul 0.10} & {\ul 0.10} & {\ul 0.10} & 0.10       & 0.10       & 0.10       & 0.10       & 0.10       & 0.10 & \( \epsilon_1 = 0.30 \)     \\
+    \( e^{-\alpha_1 y_i h_1(x_i)} \)              & 0.65 & 1.53       & 1.53       & 1.53       & 0.65       & 0.65       & 0.65       & 0.65       & 0.65       & 0.65 & \( \alpha_1 \approx 0.42 \) \\
+    \( D_1(i) \cdot e^{-\alpha_1 y_i h_1(x_i)} \) & 0.07 & 0.15       & 0.15       & 0.15       & 0.07       & 0.07       & 0.07       & 0.07       & 0.07       & 0.07 & \( Z_1 \approx 0.92 \)      \\ \hline
+    \( D_2(i) \)                                  & 0.07 & 0.17       & 0.17       & 0.17       & 0.07       & 0.07       & {\ul 0.07} & {\ul 0.07} & {\ul 0.07} & 0.07 & \( \epsilon_2 = 0.21 \)     \\
+    \( e^{-\alpha_2 y_i h_2(x_i)} \)              & 0.52 & 0.52       & 0.52       & 0.52       & 0.52       & 0.52       & 1.91       & 1.91       & 1.91       & 0.52 & \( \alpha_2 \approx 0.65 \) \\
+    \( D_2(i) \cdot e^{-\alpha_2 y_i h_2(x_i)} \) & 0.04 & 0.09       & 0.09       & 0.09       & 0.04       & 0.04       & 0.14       & 0.14       & 0.14       & 0.04 & \( Z_2 \approx 0.82 \)      \\ \hline
+    \( D_3(i) \)                                  & 0.05 & 0.11       & 0.11       & 0.11       & {\ul 0.05} & {\ul 0.05} & 0.17       & 0.17       & 0.17       & 0.05 & \( \epsilon_3 = 0.10 \)     \\
+    \( e^{-\alpha_2 y_i h_2(x_i)} \)              & 0.33 & 0.33       & 0.33       & 0.33       & 3.00       & 3.00       & 0.33       & 0.33       & 0.33       & 0.33 & \( \alpha_3 \approx 1.10 \) \\
+    \( D_3(i) \cdot e^{-\alpha_3 y_i h_3(x_i)} \) & 0.02 & 0.04       & 0.04       & 0.04       & 0.15       & 0.15       & 0.06       & 0.06       & 0.06       & 0.02 & \( Z_3 \approx 0.64 \)      \\ \hline
+    \end{tabular}
+\end{table}
+
